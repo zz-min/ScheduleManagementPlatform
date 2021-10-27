@@ -36,10 +36,11 @@ public class ApiUserController implements ControllerInterface {
 			if (path.contains("login")) {
 				System.out.println(":D:D");
 				// 로그인 유효성 검사해주기
-				String id=new String(base64.decode(((String) request.getAttribute("id")).getBytes()));//디코딩된값
-				String pwd=new String(base64.decode(((String) request.getAttribute("pwd")).getBytes()));
-				System.out.println(id+"와"+pwd);
-				returnMassage="error.jsp";
+				String id=new String(base64.decode(request.getParameter("id").getBytes()));//디코딩된값
+				String pwd=new String(base64.decode( request.getParameter("pwd").getBytes()));
+				System.out.println(id+"와"+pwd+"를 유효성검사중");
+				boolean loginCheck = smpService.loginAvailability(id,pwd);//로그인 유효성 검사
+				returnMassage=loginCheck?"true":"false";
 			} else {// 특정 USER
 				if (method.equals("GET")) {// 특정 user정보가져오기
 
@@ -50,13 +51,6 @@ public class ApiUserController implements ControllerInterface {
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
 		return returnMassage;
 	}
 

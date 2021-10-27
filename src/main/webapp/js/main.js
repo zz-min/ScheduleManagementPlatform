@@ -14,7 +14,6 @@ $(function() {
 
 	function checkLength(o, min, max) {
 		if (o.val().length > max || o.val().length < min) {
-			//o.addClass("ui-state-error"); //에러 집어넣기
 			return false;
 		} else {
 			o.removeClass("ui-state-error"); //에러 없애기
@@ -69,7 +68,7 @@ $(function() {
 				if (res == 'true') {
 					console.log("로그인 성공");
 					var index = $("#id_check").text().substr(3);
-					window.location.assign("/main?btn=" + index);
+					window.location.assign("/main?btn=" + index+"&id="+$("#userId").val());
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});
 

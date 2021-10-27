@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.web.smp.controller.impl.ControllerInterface;
+import com.web.smp.dao.impl.ContentJdbcDao;
+import com.web.smp.dao.impl.ScheduleJdbcDao;
+import com.web.smp.dao.impl.UserJdbcDao;
+import com.web.smp.dao.interf.ContentDao;
+import com.web.smp.dao.interf.ScheduleDao;
+import com.web.smp.dao.interf.UserDao;
 
 /**
  * Servlet implementation class DispatcherServlet
@@ -37,10 +43,11 @@ public class DispatcherServlet extends HttpServlet {
 		String userName = context.getInitParameter("db_userid");
 		String password = context.getInitParameter("db_passwd");
 
-		//LoginDao loginJdbc=new LoginJdbcDao(driver, url, userName, password);
-		//ContentDao contentDao=new ContentJdbcDao(driver, url, userName, password);
+		UserDao userDao=new UserJdbcDao(driver, url, userName, password);
+		ContentDao contentDao=new ContentJdbcDao(driver, url, userName, password);
+		ScheduleDao scheduleDao=new ScheduleJdbcDao(driver, url, userName, password);
 		
-		smpService = new SmpServiceImpl();
+		smpService = new SmpServiceImpl(userDao,contentDao,scheduleDao);
 
 		mapper = new HandlerMapping();
 	}
@@ -63,7 +70,7 @@ public class DispatcherServlet extends HttpServlet {
 		if (path.contains("api")) {// REST API 기술
 			System.out.println("IN REST API");
 			String data = handler.handleRequest(request, response, smpService);
-
+			
 			// step #3. output processing results
 			response.setContentType("text/html;charset=UTF-8");
 			response.getWriter().write(data);

@@ -14,22 +14,22 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-	
-		<context-param>
+
+	<context-param>
 		<param-name>jdbc_driver</param-name>
-		<param-value>oracle.jdbc.driver.OracleDriver</param-value>
+		<param-value>com.mysql.cj.jdbc.Driver</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db_url</param-name>
-		<param-value>jdbc:oracle:thin:@3.36.100.25/xe</param-value>
+		<param-value>jdbc:mysql://db-smp.ctqcwujeqj0t.ap-northeast-2.rds.amazonaws.com:3306/web</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db_userid</param-name>
-		<param-value>web</param-value>
+		<param-value>smp_admin</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db_passwd</param-name>
-		<param-value>oradb</param-value>
+		<param-value>smp_admin1!</param-value>
 	</context-param>
 	
 	<servlet-mapping>
@@ -44,5 +44,4 @@
 		<url-pattern>*.txt</url-pattern>
 	</servlet-mapping>
   
-
 </web-app>
