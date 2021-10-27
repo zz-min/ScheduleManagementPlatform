@@ -69,17 +69,17 @@
 						<span id="id">${id}</span>
 					</div>
 				</div>
-				<input type="button" value="예약현황" class="rsvBtn" />
+				<input type="button" value="스케쥴 현황" class="scheduleBtn" />
 				<!-- onclick="location.href='/studio/reservation'" -->
 			</div>
-			<div class="studioContainer">
+			<div class="contentContainer">
 				<form>
-					<select name="checkedLoc1" id="checkedLoc1" class="checkedLoc">
+					<select name="checkedMain" id="checkedMain" class="checkedContent">
 						<option value="none">== 건물 선택 ==</option>
 						<c:forEach var="i" begin="0" end="${fn:length(mainContentList)-1}">
 							<option value="${mainContentList[i]}">${mainContentList[i]}</option>
 						</c:forEach>
-					</select> <select name="checkedLoc2" id="checkedLoc2" class="checkedLoc">
+					</select> <select name="checkedSub" id="checkedSub" class="checkedContent">
 						<option value="none">== 건물을 먼저 선택해주세요 ==</option>
 					</select>
 				</form>
@@ -115,29 +115,9 @@
 				<div class="timeLineTitle">TIME</div>
 				<!-- 9시~18시 -->
 				<c:forEach var="i" begin="9" end="19">
-					<%-- <c:set var="str1" value=i+":00 ~ "+i+":30"/>
-					<c:set var="str1" value=i+":30 ~ "+(i+1)+":00"/> --%>
-					<div class="timeLineItem"><c:out value=i+':00 ~ '+i+':30'/></div>
-					<div class="timeLineItem"><c:out value=i+":30 ~ "+(i+1)+":00"/></div>
+					<div class="timeLineItem">${i}&nbsp:&nbsp00&nbsp~&nbsp${i}&nbsp:&nbsp30</div>
+					<div class="timeLineItem">${i}&nbsp:&nbsp30&nbsp~&nbsp${i+1}&nbsp:&nbsp00</div>
 				</c:forEach>
-<!-- 				<div class="timeLineItem">09:00 ~ 09:30</div>
-				<div class="timeLineItem">09:30 ~ 10:00</div>
-				<div class="timeLineItem">10:00 ~ 10:30</div>
-				<div class="timeLineItem">10:30 ~ 11:00</div>
-				<div class="timeLineItem">11:00 ~ 11:30</div>
-				<div class="timeLineItem">11:30 ~ 12:00</div>
-				<div class="timeLineItem">12:00 ~ 12:30</div>
-				<div class="timeLineItem">12:30 ~ 01:00</div>
-				<div class="timeLineItem">01:00 ~ 01:30</div>
-				<div class="timeLineItem">01:30 ~ 02:00</div>
-				<div class="timeLineItem">02:00 ~ 02:30</div>
-				<div class="timeLineItem">02:30 ~ 03:00</div>
-				<div class="timeLineItem">03:00 ~ 03:30</div>
-				<div class="timeLineItem">03:30 ~ 04:00</div>
-				<div class="timeLineItem">04:00 ~ 04:30</div>
-				<div class="timeLineItem">04:30 ~ 05:00</div>
-				<div class="timeLineItem">05:00 ~ 05:30</div>
-				<div class="timeLineItem">05:30 ~ 06:00</div> -->
 			</div>
 			<div class="weekContainer">
 				<div id="calendar">

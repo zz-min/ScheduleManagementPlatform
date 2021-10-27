@@ -64,8 +64,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			buildMonth();
 		}
 	});
-	$("#checkedLoc1").change(function() {
-		var v = $("#checkedLoc1").val();
+	$("#checkedMain").change(function() {
+		var v = $("#checkedMain").val();
 		fetchData(`/studio/data?loc=${v}`, 'loc');
 	});
 	//////////ajax		
@@ -132,9 +132,9 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}else if(pageVal === 'weekly'){
 			// 전혁 - 주간 데이터 끌고올것
 		} else if (pageVal === 'loc') {
-			$("#checkedLoc2").find("option").remove();//기존 옵션 제거하고 새로운  loc에 따른 장소 불러올 것
+			$("#checkedSub").find("option").remove();//기존 옵션 제거하고 새로운  loc에 따른 장소 불러올 것
 			for (var value of json) {
-				$('#checkedLoc2').append($("<option></option>").attr("value", 2).text(`${value.studiono}`));
+				$('#checkedSub').append($("<option></option>").attr("value", 2).text(`${value.studiono}`));
 			}
 		}else if (pageVal === 'rsvList') {
 			$("#rsvTableBody").empty();//테이블 내용 비우기
@@ -171,10 +171,10 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		
 		//rightSection칸에 month소스 채우기
 		var daySet = makeElementMonth(firstDate);
-		fetchPage('../js/monthForm.txt',daySet,'monthly');
+		//fetchPage('../js/monthForm.txt',daySet,'monthly');
 		//alert(today.getFullYear()+"년"+String(today.getMonth()+1).padStart(2,'0')+"월의 데이터 전송");
 		
-		fetchData(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
+		//fetchData(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
 	}
 
 	function makeElementMonth(firstDate) {
