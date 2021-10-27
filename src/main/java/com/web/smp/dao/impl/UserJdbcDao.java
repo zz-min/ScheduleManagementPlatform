@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.web.smp.dao.interf.UserDao;
+import com.web.smp.di.entity.User;
 
 public class UserJdbcDao implements UserDao {
 	private String driver;
@@ -78,6 +81,108 @@ public class UserJdbcDao implements UserDao {
 				}
 		}
 		return TF;
+	}
+
+	@Override
+	public User getUser(String id) {
+		User user=null;
+		String sql = "select user_type, user_id, user_name from user where user_id = ?";
+		System.out.println("getUser함수 sql>>"+sql);
+		try {
+			connect();
+			
+			stmt =  conn.prepareStatement(sql);
+			stmt.setString(1, id);
+			
+			rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				user=new User();
+				user.setUser_type(rs.getString("user_type"));
+				user.setUser_id(rs.getString("user_id"));
+				user.setUser_name(rs.getString("user_name"));
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+				try {
+					disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return user;
+	}
+
+	@Override
+	public List<User> getUserList(String query) {
+		List<User> userList=null;
+		
+		String sql = "select user_seq,user_type, user_id, user_name from user";
+		sql = sql + (query != null && !query.equals("") ? " WHERE " + query : " ORDER BY user_seq, user_type");
+		System.out.println("getUserList함수 sql>>"+sql);
+		try {
+			connect();
+			
+			stmt =  conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			if (rs.isBeforeFirst()) {
+				userList=new ArrayList<User>();
+				
+				while(rs.next()) {
+					User user=new User();
+					user.setUser_seq(rs.getInt("user_seq"));
+					user.setUser_type(rs.getString("user_type"));
+					user.setUser_id(rs.getString("user_id"));
+					user.setUser_name(rs.getString("user_name"));
+					
+					userList.add(user);
+				}
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+				try {
+					disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return userList;
+	}
+
+	@Override
+	public String getUserName(String id) {
+		String userName=null;
+		String sql = "select user_name from user where user_id = ?";
+		System.out.println("getUser함수 sql>>"+sql);
+		try {
+			connect();
+			
+			stmt =  conn.prepareStatement(sql);
+			stmt.setString(1, id);
+			
+			rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				userName =rs.getString("user_name");
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+				try {
+					disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return userName;
 	}
 
 }

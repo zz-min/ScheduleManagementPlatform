@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.web.smp.dao.interf.ContentDao;
+import com.web.smp.di.entity.Content;
 
 public class ContentJdbcDao implements ContentDao {
 	private String driver;
@@ -47,5 +50,57 @@ public class ContentJdbcDao implements ContentDao {
 			conn.close();
 			conn = null;
 		}
+	}
+
+	@Override
+	public Content getContent(int content_seq) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Content> getContentList(String query) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getMainCategory(int menu_no) {
+		List<String> mainCategoryList=null;
+		
+		String sql = "select main_content from content where category= ? ";
+		System.out.println("getUserList함수 sql>>"+sql);
+		try {
+			connect();
+			
+			stmt =  conn.prepareStatement(sql);
+			stmt.setInt(1, menu_no);
+			rs = stmt.executeQuery();
+			
+			if (rs.isBeforeFirst()) {
+				mainCategoryList=new ArrayList<String>();
+				
+				while(rs.next()) {
+					mainCategoryList.add(rs.getString("main_content"));
+				}
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+				try {
+					disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return mainCategoryList;
+	}
+
+	@Override
+	public List<String> getMSubCategory(int menu_no) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,1 +1,40 @@
 @charset "UTF-8";
+/* =============================================RIGHT(monthly)============================================= */
+.dayHeaderContainer {
+	height: 35px;
+}
+
+.calendarWeekContainer {
+	height: calc(100%/ 6.5);
+}
+
+.dayHeader {
+	height: 100%;
+	width: calc(100%/ 7.2);
+	display: flex;
+	align-items:center;
+	justify-content:center;
+	
+	font-size: 1.3em;
+	font-weight: 550;
+	background-color: #7C7877;
+}
+
+.calendar__day {
+	width: calc(100%/ 7.2);
+	height:100%;
+	background-color:#ABD0CE;
+}
+
+.calendar__day>span {
+	display: block;
+}
+.calendar__day>span:first-child {
+	font-size: 1.1em;
+	margin: 0.4em;
+}
+.calendar__day>span:last-child {
+	height:65%;
+	overflow-y:scroll;
+	font-size: 0.8em;
+}

@@ -1,27 +1,78 @@
 package com.web.smp.controller;
 
-import com.web.smp.dao.impl.ContentJdbcDao;
-import com.web.smp.dao.impl.ScheduleJdbcDao;
-import com.web.smp.dao.impl.UserJdbcDao;
+import java.util.List;
+
 import com.web.smp.dao.interf.ContentDao;
 import com.web.smp.dao.interf.ScheduleDao;
 import com.web.smp.dao.interf.UserDao;
+import com.web.smp.di.entity.Content;
+import com.web.smp.di.entity.Schedule;
+import com.web.smp.di.entity.User;
 
 public class SmpServiceImpl implements SmpService {
 	private UserDao userDao = null;
 	private ContentDao contentDao = null;
 	private ScheduleDao scheduleDao = null;
-	public SmpServiceImpl() {}
-	
-	public SmpServiceImpl(UserDao userDao,ContentDao contentDao,ScheduleDao scheduleDao) {
+
+	public SmpServiceImpl() {
+	}
+
+	public SmpServiceImpl(UserDao userDao, ContentDao contentDao, ScheduleDao scheduleDao) {
 		this.userDao = userDao;
 		this.contentDao = contentDao;
 		this.scheduleDao = scheduleDao;
 	}
-	
+	/* User Dao */
 	@Override
 	public boolean loginAvailability(String id, String pwd) {
 		return userDao.loginAvailability(id, pwd);
 	}
 
+	@Override
+	public User getUser(String id) {
+		return userDao.getUser(id);
+	}
+
+	@Override
+	public String getUserName(String id) {
+		return userDao.getUserName(id);
+	}
+
+	@Override
+	public List<User> getUserList(String query) {
+		return userDao.getUserList(query);
+	}
+	/* Content Dao */
+
+	@Override
+	public Content getContent(int content_seq) {
+		return contentDao.getContent(content_seq);
+	}
+
+	@Override
+	public List<Content> getContentList(String query) {
+		return contentDao.getContentList(query);
+	}
+
+	@Override
+	public List<String> getMainCategory(int menu_no) {
+		return contentDao.getMainCategory(menu_no);
+	}
+
+	@Override
+	public List<String> getMSubCategory(int menu_no) {
+		return contentDao.getMSubCategory(menu_no);
+	}
+
+	/* Schdule Dao */
+	@Override
+	public Schedule getSchedule(int schedule_seq) {
+		return scheduleDao.getSchedule(schedule_seq);
+	}
+
+	@Override
+	public List<Schedule> getScheduleList(String query) {
+		return scheduleDao.getScheduleList(query);
+	}
+	
 }

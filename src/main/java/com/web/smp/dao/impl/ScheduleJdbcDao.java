@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.web.smp.dao.interf.ScheduleDao;
+import com.web.smp.di.entity.Schedule;
 
 public class ScheduleJdbcDao implements ScheduleDao {
 	private String driver;
@@ -47,5 +49,17 @@ public class ScheduleJdbcDao implements ScheduleDao {
 			conn.close();
 			conn = null;
 		}
+	}
+
+	@Override
+	public Schedule getSchedule(int schedule_seq) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Schedule> getScheduleList(String query) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

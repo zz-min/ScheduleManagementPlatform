@@ -21,14 +21,12 @@ public class MainController implements ControllerInterface {
 		System.out.println("MainController path >>"+path);
 		
 		// /main?btn=1?id=2202
-		//로그인 정보 세션에 담기
-		//대분류 정보 세션에 담기
+		//로그인 정보-id와 name 세션에 담기
 		session.setAttribute("id", id);
+		session.setAttribute("name", smpService.getUserName(id));
 		
-		String str="content_type='btn"+query.substring(4)+"'";
-		
-		List<String> mainContentList = smpService.mainContentList(str);
-
+		//대분류 정보 request에 담기
+		List<String> mainContentList = smpService.getMainCategory(Integer.parseInt(btnNo));
 		request.setAttribute("mainContentList", mainContentList);
 
 		

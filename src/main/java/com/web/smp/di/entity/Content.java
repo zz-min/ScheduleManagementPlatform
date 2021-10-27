@@ -2,19 +2,20 @@ package com.web.smp.di.entity;
 
 public class Content {
 	private int content_seq; // Content 테이블 시퀀스
-	private int manu_no; //btn 번호
-	private String main_Category; // 메인 카테고리 
-	private String sub_Category; // 서브 카테고리 
+	private int category; //category 번호
+	private String main_content; // 메인 카테고리 
+	private String sub_content; // 서브 카테고리 
 	
 	public Content() {
 	}
-
-	public Content(int content_seq, int manu_no, String main_Category, String sub_Category) {
+	
+	public Content(int content_seq, int category, String main_content, String sub_content) {
 		this.content_seq = content_seq;
-		this.manu_no = manu_no;
-		this.main_Category = main_Category;
-		this.sub_Category = sub_Category;
+		this.category = category;
+		this.main_content = main_content;
+		this.sub_content = sub_content;
 	}
+
 
 	public int getContent_seq() {
 		return content_seq;
@@ -24,35 +25,36 @@ public class Content {
 		this.content_seq = content_seq;
 	}
 
-	public int getManu_no() {
-		return manu_no;
+	public int getCategory() {
+		return category;
 	}
 
-	public void setManu_no(int manu_no) {
-		this.manu_no = manu_no;
+	public void setCategory(int category) {
+		this.category = category;
 	}
 
-	public String getMain_Category() {
-		return main_Category;
+	public String getMain_content() {
+		return main_content;
 	}
 
-	public void setMain_Category(String main_Category) {
-		this.main_Category = main_Category;
+	public void setMain_content(String main_content) {
+		this.main_content = main_content;
 	}
 
-	public String getSub_Category() {
-		return sub_Category;
+	public String getSub_content() {
+		return sub_content;
 	}
 
-	public void setSub_Category(String sub_Category) {
-		this.sub_Category = sub_Category;
+	public void setSub_content(String sub_content) {
+		this.sub_content = sub_content;
 	}
 
 	@Override
 	public String toString() {
-		return "Content [content_seq=" + content_seq + ", manu_no=" + manu_no + ", main_Category=" + main_Category
-				+ ", sub_Category=" + sub_Category + "]";
+		return "Content [content_seq=" + content_seq + ", category=" + category + ", main_content=" + main_content
+				+ ", sub_content=" + sub_content + "]";
 	}
+
 	
 	
 }
