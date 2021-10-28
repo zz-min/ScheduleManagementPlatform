@@ -43,7 +43,6 @@ $(function() {
 		userLoginField.removeClass("ui-state-error");
 
 		valid = checkLength(userLoginField, 5, 15);
-		//valid = checkLength($("#userID"), 5, 15) && checkLength($("#user"), 4, 20);
 		if (valid) {//true - 로그인 요청
 			userLoginFun();
 		} else {//false
@@ -67,7 +66,7 @@ $(function() {
 			.then(res => {
 				if (res == 'true') {
 					console.log("로그인 성공");
-					var index = $("#checkedCategory").text().substr(3);
+					var index = $("#checkedCategory").text().substr(8);
 					window.location.assign("/main?category=" + index+"&id="+$("#userId").val());
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});

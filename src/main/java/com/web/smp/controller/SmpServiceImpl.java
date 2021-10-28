@@ -71,8 +71,8 @@ public class SmpServiceImpl implements SmpService {
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(String query) {
-		return scheduleDao.getScheduleList(query);
+	public List<Schedule> getScheduleList(String query, String categoryNo) {
+		return scheduleDao.getScheduleList(query,categoryNo);
 	}
 	
 }

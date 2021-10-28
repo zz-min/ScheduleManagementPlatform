@@ -7,7 +7,7 @@ public class Schedule {
 	private int schedule_seq; // Schedule 테이블 시퀀스
 	private int content_no; // Content 테이블 시퀀스 번호 불러오기
 	private String user_id; // 유저 아이디
-	private Date rsv_date; // 예약 날짜
+	private String rsv_date; // 예약 날짜
 	private Time start_time; // 시작 시간
 	private Time end_time; // 종료 시간
 	
@@ -15,7 +15,7 @@ public class Schedule {
 		super();
 	}
 
-	public Schedule(int schedule_seq, int content_no, String user_id, Date rsv_date, Time start_time, Time end_time) {
+	public Schedule(int schedule_seq, int content_no, String user_id, String rsv_date, Time start_time, Time end_time) {
 		super();
 		this.schedule_seq = schedule_seq;
 		this.content_no = content_no;
@@ -49,11 +49,11 @@ public class Schedule {
 		this.user_id = user_id;
 	}
 
-	public Date getRsv_date() {
+	public String getRsv_date() {
 		return rsv_date;
 	}
 
-	public void setRsv_date(Date rsv_date) {
+	public void setRsv_date(String rsv_date) {
 		this.rsv_date = rsv_date;
 	}
 

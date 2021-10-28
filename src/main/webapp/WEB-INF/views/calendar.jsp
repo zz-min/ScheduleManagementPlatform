@@ -31,7 +31,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script src="/js/calendar.js?j"></script>
+<script src="/js/calendar.js?jn"></script>
 <body>
 	<!--------------- HEADER ⊃  calendar_title,calendar_main-------------->
 	<div class="headerContainer">
@@ -70,7 +70,6 @@
 					</div>
 				</div>
 				<input type="button" value="스케쥴 현황" class="scheduleBtn" />
-				<!-- onclick="location.href='/studio/reservation'" -->
 			</div>
 			<div class="contentContainer">
 				<form>
@@ -125,8 +124,8 @@
 					<div class="timeLineTitle">TIME</div>
 					<!-- 9시~18시 -->
 					<c:forEach var="i" begin="9" end="18">
-						<div class="timeLineItem">${i}:00~${i} : 30</div>
-						<div class="timeLineItem">${i}:30~${i+1} : 00</div>
+						<div class="timeLineItem">${i} : 00 ~ ${i} : 30</div>
+						<div class="timeLineItem">${i} : 30 ~ ${i+1} : 00</div>
 					</c:forEach>
 				</div>
 				<div class="weekContainer">

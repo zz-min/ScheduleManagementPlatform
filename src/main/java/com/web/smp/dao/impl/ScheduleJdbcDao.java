@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.web.smp.dao.interf.ScheduleDao;
@@ -58,8 +59,44 @@ public class ScheduleJdbcDao implements ScheduleDao {
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(String query) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Schedule> getScheduleList(String query,String categoryNo) {
+		//view에 따라서 출력 - v_schedule_for1
+		List<Schedule> scheduleList = null;
+		String sql = "select * from v_schedule_for"+categoryNo;
+		sql = sql + (query != null && !query.equals("") ? " WHERE " + query : " ORDER BY rsv_date");
+		
+		System.out.println("getScheduleList함수 sql>>" + sql);
+		try {
+			connect();
+
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			if (rs.isBeforeFirst()) {
+				scheduleList = new ArrayList<Schedule>();
+
+				while (rs.next()) {
+					Schedule schedule = new Schedule();
+					schedule.setSchedule_seq(rs.getInt("schedule_seq"));
+					schedule.setContent_no(rs.getInt("content_no"));
+					schedule.setUser_id(rs.getString("user_id"));
+					schedule.setRsv_date(rs.getString("rsv_date"));
+					schedule.setStart_time(rs.getTime("start_time"));
+					schedule.setEnd_time(rs.getTime("end_time"));
+
+					scheduleList.add(schedule);
+				}
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				disconnect();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return scheduleList;
 	}
 }

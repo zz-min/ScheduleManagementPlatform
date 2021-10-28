@@ -117,25 +117,27 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		if (json != null) {
 			if (pageVal === 'monthly') {
 				for (var value of json) {
+					console.log(value);
 
-					var day = value.rsvDate.substring(6, 8);
+					var day = value.rsv_date.substr(8, 2);
 					var oneday = new Date(today.getFullYear(), today.getMonth(), day);
-					console.log("예약번호 : " + value.rsvno + "날짜" + day + "요일" + oneday.getDay() + "몇주차? : " + getWeekOfMonth(oneday));
-					//console.log(oneday+"날짜에 <<"+value.rsvno+">>데이터 집어 놀예정");
-					//console.log(oneday.getDay()-1);
-					//console.log(value.rsvno+"예약번호 / 날짜 : "+oneday+"  달 :"+oneday.getMonth());
-					//console.log(value.rsvno+"예약번호 / 날짜 : "+oneday+"  요일 :"+oneday.getDay()+"=="+(oneday.getDay()-1));
+
 					if (oneday.getDay() == 0) {//일요일
-						/*$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").children().last()
-						.text(`${value.studioloc} ${value.studiono}호)${value.startTime}~${value.endTime}`);*/
+						$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").children().last()
+							.children().append(`<li>${value.start_time}~${value.end_time}</li>`);
+					} else {//1~6 월~토
+
+						$(".week" + getWeekOfMonth(oneday)).children(":eq(" + (oneday.getDay() - 1) + ")").children().last()
+							.children().append(`<li>${value.start_time}~${value.end_time}</li>`);
+					}
+					/*if (oneday.getDay() == 0) {//일요일
 						$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").children().last()
 							.children().append(`<li>${value.studioloc} ${value.studiono}호)${value.startTime}~${value.endTime}</li>`);
 					} else {//1~6 월~토
-						/*$(".week" + getWeekOfMonth(oneday)).children(":eq("+(oneday.getDay()-1)+")").children().last()
-						.text(`예약번호 : ${value.rsvno} // ${value.studioloc} ${value.studiono}호)${value.startTime}~${value.endTime}`);*/
+
 						$(".week" + getWeekOfMonth(oneday)).children(":eq(" + (oneday.getDay() - 1) + ")").children().last()
 							.children().append(`<li>${value.studioloc} ${value.studiono}호)${value.startTime}~${value.endTime}</li>`);
-					}
+					}*/
 
 				}
 			} else if (pageVal === 'weekly') {
@@ -188,7 +190,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	//////////달력 - monthly	
 	buildMonth();
 	function buildMonth() {
-		showMonth();;
+		showMonth();
 		firstDate = new Date(today.getFullYear(), today.getMonth(), 1, today.getDay());//2021.9.1.2(수)
 		lastDay = new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0).getDate();//9/30 3(목)
 		prevLastDay = new Date(firstDate.getFullYear(), firstDate.getMonth(), 0).getDate();//8/31 1(화)
@@ -199,8 +201,9 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		//fetchPage('../js/monthForm.txt',daySet,'monthly');
 		// class -  monthlyCalendar
 		//alert(today.getFullYear()+"년"+String(today.getMonth()+1).padStart(2,'0')+"월의 데이터 전송");
-
-		fetchData(`/api/schedules/${categoryNo}?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
+		
+		//alert(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`);
+		fetchData(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
 	}
 
 	function makeElementMonth(firstDate) {

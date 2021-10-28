@@ -16,19 +16,19 @@ public class MainController implements ControllerInterface {
 	public String handleRequest(HttpServletRequest request, HttpServletResponse response, SmpService smpService) {
 		HttpSession session = request.getSession(true);
 		String path = request.getRequestURI();
-		String categoryNo=request.getParameter("category");
+		String category=request.getParameter("category");
 		String id=request.getParameter("id");
 		System.out.println("MainController path >>"+path);
 		
 		// /main?category=1?id=2202
-		session.setAttribute("categoryNo", categoryNo);//매번 Main들어올때마다 리셋
+		session.setAttribute("category", category);//매번 Main들어올때마다 리셋
 		
 		//로그인 정보-id와 name 세션에 담기
 		session.setAttribute("id", id);
 		session.setAttribute("name", smpService.getUserName(id));
 		
 		//대분류 정보 request에 담기
-		List<String> mainContentList = smpService.getMainCategory(Integer.parseInt(categoryNo));
+		List<String> mainContentList = smpService.getMainCategory(Integer.parseInt(category));
 		request.setAttribute("mainContentList", mainContentList);
 
 		

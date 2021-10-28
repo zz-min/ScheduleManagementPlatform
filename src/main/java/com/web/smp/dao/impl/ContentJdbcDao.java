@@ -32,11 +32,11 @@ public class ContentJdbcDao implements ContentDao {
 		Class.forName(driver);
 		conn = DriverManager.getConnection(url, userName, password);
 		
-		System.out.println("LoginJdbcDao  DB연결성공");
+		System.out.println("ContentJdbcDao  DB연결성공");
 	}
 
 	private void disconnect() throws SQLException {
-		System.out.println("LoginJdbcDao  DB연결해제");
+		System.out.println("ContentJdbcDao  DB연결해제");
 		
 		if (rs != null && !rs.isClosed()) {
 			rs.close();
@@ -68,7 +68,7 @@ public class ContentJdbcDao implements ContentDao {
 	public List<String> getMainCategory(int menu_no) {
 		List<String> mainCategoryList=null;
 		
-		String sql = "select main_content from content where category= ? ";
+		String sql = "select DISTINCT main_content from content where category= ? ";
 		System.out.println("getUserList함수 sql>>"+sql);
 		try {
 			connect();
