@@ -27,17 +27,17 @@
 	
 	<div class="titleContainer">
 		<h1 id="title">Schedule Management Platform</h1>
-		<p id="id_check"></p>
+		<p id="checkedCategory"></p><!--category1값이 text로 저장 - hidden  -->
 	</div>
 
 	<div class="btnContainer">
-		<input type="button" name="studioBtn" value="studio" class="menuBtn" id="btn1"/>
-		<input type="button" name="studioBtn" value="rental" class="menuBtn" id="btn2"/>
-		<input type="button" name="studioBtn" value="aaa" class="menuBtn" id="btn3"/>
-		<input type="button" name="studioBtn" value="bbb" class="menuBtn" id="btn4"/>
-		<input type="button" name="studioBtn" value="ccc" class="menuBtn" id="btn5"/>
-		<input type="button" name="studioBtn" value="ddd" class="menuBtn" id="btn6"/>
-		<input type="button" name="studioBtn" value="eee" class="menuBtn" id="btn7"/>
+		<input type="button" name="studioBtn" value="studio" class="menuBtn" id="category1"/>
+		<input type="button" name="studioBtn" value="rental" class="menuBtn" id="category2"/>
+		<input type="button" name="studioBtn" value="aaa" class="menuBtn" id="category3"/>
+		<input type="button" name="studioBtn" value="bbb" class="menuBtn" id="category4"/>
+		<input type="button" name="studioBtn" value="ccc" class="menuBtn" id="category5"/>
+		<input type="button" name="studioBtn" value="ddd" class="menuBtn" id="category6"/>
+		<input type="button" name="studioBtn" value="eee" class="menuBtn" id="category7"/>
 	</div>	
 	
  	<!------------------------- studio button - login dialog ------------------------->

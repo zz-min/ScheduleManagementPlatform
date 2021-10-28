@@ -3,7 +3,6 @@ package com.web.smp.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.web.smp.controller.impl.ApiBtnController;
 import com.web.smp.controller.impl.ApiContentController;
 import com.web.smp.controller.impl.ApiScheduleController;
 import com.web.smp.controller.impl.ApiUserController;
@@ -24,7 +23,6 @@ public class HandlerMapping {
 		handlerMapper.put("/api/users", new ApiUserController());
 		handlerMapper.put("/api/schedules", new ApiScheduleController());
 		handlerMapper.put("/api/contents", new ApiContentController());
-		handlerMapper.put("/api/btns", new ApiBtnController());
 	}
 
 	public ControllerInterface getHandler(String path) {

@@ -22,6 +22,7 @@ public class ApiUserController implements ControllerInterface {
 		System.out.println(temp.length);
 		Base64 base64 = new Base64();
 		
+		// GET
 		// /api/users - user전체목록반환
 		// /api/users/201796 - user 중 id = 201796 만 반환
 		// /api/users/login?id=22&pwd=11 - 로그인 유효성검사확인하기

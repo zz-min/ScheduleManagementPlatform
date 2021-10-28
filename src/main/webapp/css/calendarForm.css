@@ -117,35 +117,10 @@
 	margin-top: 50px;
 }
 
-.studioLocContainer {
-	margin-left: 10px;
-	margin-bottom: 20px;
-}
-
-.studioLocContainer>h1 {
-	font-size: 1.5em;
-	margin-bottom: 0.3em;
-}
 /* =============================================RIGHT============================================= */
 .rightSection { 
 	height: 800px;
 	min-width: 920px;
 	flex-basis: 80%;
 	display: flex;
-}
-
-#calendar {
-	height: 100%; /* 800px */
-	width:100%;
-	box-sizing: border-box;
-	margin: 0.5%;
-	display: flex;
-	flex-direction: column;
-}
-
-#calendar>div {
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 5px;
 }

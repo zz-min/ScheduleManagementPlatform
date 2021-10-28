@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -20,8 +21,8 @@
 <!--font-family: 'Roboto' 기본Font사용 URL -->
 
 <link href="/css/calendarForm.css" rel="stylesheet" type="text/css">
-<link href="/css/calendarMonth.css" rel="stylesheet" type="text/css">
-<link href="/css/calendarWeek.css" rel="stylesheet" type="text/css">
+<link href="/css/calendarMonth.css?ul" rel="stylesheet" type="text/css">
+<link href="/css/calendarWeek.css?dd" rel="stylesheet" type="text/css">
 <link href="/css/common.css" rel="stylesheet" type="text/css">
 
 <link rel="stylesheet"
@@ -30,8 +31,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script src="/js/calendar.js"></script>
-</head>
+<script src="/js/calendar.js?j"></script>
 <body>
 	<!--------------- HEADER ⊃  calendar_title,calendar_main-------------->
 	<div class="headerContainer">
@@ -84,74 +84,86 @@
 					</select>
 				</form>
 			</div>
-
 		</div>
+		<%
+		List list = new ArrayList();
+		list.add("월");
+		list.add("화");
+		list.add("수");
+		list.add("목");
+		list.add("금");
+		list.add("토");
+		list.add("일");
+		pageContext.setAttribute("daySet", list);
+
+		String[] days = { "월", "화", "수", "목", "금", "토", "일" };
+		pageContext.setAttribute("days", days);
+		%>
 		<!--------------- RIGHT  --------------->
 		<div class="rightSection">
 			<!-- month form -->
-<%-- 			<div id="calendar">
+			<div class="monthlyCalendar">
 				<div class="dayHeaderContainer">
-					<div class="dayHeader">월</div>
-					<div class="dayHeader">화</div>
-					<div class="dayHeader">수</div>
-					<div class="dayHeader">목</div>
-					<div class="dayHeader">금</div>
-					<div class="dayHeader">토</div>
-					<div class="dayHeader">일</div>
+					<c:forEach var="item" items="${days}" varStatus="idx">
+						<div class="dayHeader">${item}</div>
+					</c:forEach>
 				</div>
 				<c:forEach var="i" begin="0" end="5">
 					<div class='calendarWeekContainer week${i+1}'>
 						<c:forEach var="i" begin="0" end="6">
-							<div class='calendar__day'>
+							<div class='calendar_day'>
 								<span></span><span></span>
 							</div>
 						</c:forEach>
 					</div>
-				</c:forEach>					
-			</div> --%>
-
-			<!-- week form -->
-			<div class="timeLineContainer">
-				<div class="timeLineTitle">TIME</div>
-				<!-- 9시~18시 -->
-				<c:forEach var="i" begin="9" end="19">
-					<div class="timeLineItem">${i}&nbsp:&nbsp00&nbsp~&nbsp${i}&nbsp:&nbsp30</div>
-					<div class="timeLineItem">${i}&nbsp:&nbsp30&nbsp~&nbsp${i+1}&nbsp:&nbsp00</div>
 				</c:forEach>
 			</div>
-			<div class="weekContainer">
-				<div id="calendar">
-					<div class="dayHeaderContainer">
-						<div class="dayHeader">
-							<span>월</span><span id="dayoftheweek0">test</span>
-						</div>
-						<div class="dayHeader">
-							<span>화</span><span id="dayoftheweek1">test</span>
-						</div>
-						<div class="dayHeader">
-							<span>수</span><span id="dayoftheweek2">test</span>
-						</div>
-						<div class="dayHeader">
-							<span>목</span><span id="dayoftheweek3">test</span>
-						</div>
-						<div class="dayHeader">
-							<span>금</span><span id="dayoftheweek4">test</span>
-						</div>
-						<div class="dayHeader">
-							<span>토</span><span id="dayoftheweek5">test</span>
-						</div>
-						<div class="dayHeader">
-							<span>일</span><span id="dayoftheweek6">test</span>
-						</div>
-					</div>
 
-					<div id="calendar_value"></div>
+			<!-- week form -->
+			<div class="weeklyCalendar">
+				<div class="timeLineContainer">
+					<div class="timeLineTitle">TIME</div>
+					<!-- 9시~18시 -->
+					<c:forEach var="i" begin="9" end="18">
+						<div class="timeLineItem">${i}:00~${i} : 30</div>
+						<div class="timeLineItem">${i}:30~${i+1} : 00</div>
+					</c:forEach>
+				</div>
+				<div class="weekContainer">
+					<div id="calendar">
+						<div class="dayHeaderContainer">
+							<c:forEach var="item" items="${days}" varStatus="idx">
+								<div class="dayHeader">
+									<span>${item}</span><span id="dayoftheweek">NoneData</span>
+								</div>
+							</c:forEach>
+						</div>
+
+						<div id="calendar_value"></div>
+					</div>
 				</div>
 			</div>
 
+			<!-- schedule form -->
+			<div class="userScheduleContainer">
+				<h1>내 스케쥴 현황</h1>
+				<div id="rsvList">
+					<table border="1">
+						<thead>
+							<tr>
+								<th>스튜디오</th>
+								<th>예약 날짜</th>
+								<th>시간</th>
+							</tr>
+						</thead>
+						<tbody id="rsvTableBody">
 
-
-		</div>
-	</div>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+		</div><!-- rightSection END -->
+	</div><!-- sectionContainer END -->
 </body>
 </html>
