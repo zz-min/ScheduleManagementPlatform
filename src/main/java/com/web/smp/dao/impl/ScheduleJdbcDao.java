@@ -34,11 +34,11 @@ public class ScheduleJdbcDao implements ScheduleDao {
 		Class.forName(driver);
 		conn = DriverManager.getConnection(url, userName, password);
 		
-		System.out.println("LoginJdbcDao  DB연결성공");
+		//System.out.println("ScheduleJdbcDao  DB연결성공");
 	}
 
 	private void disconnect() throws SQLException {
-		System.out.println("LoginJdbcDao  DB연결해제");
+		//System.out.println("ScheduleJdbcDao");
 		
 		if (rs != null && !rs.isClosed()) {
 			rs.close();
@@ -85,10 +85,9 @@ public class ScheduleJdbcDao implements ScheduleDao {
 					schedule.setUser_type(rs.getString("user_type"));
 					schedule.setUser_id(rs.getString("user_id"));
 					schedule.setUser_name(rs.getString("user_name"));
-					schedule.setRsv_date(rs.getString("rsv_date"));
-					schedule.setStart_time(rs.getString("start_time"));
-					schedule.setEnd_time(rs.getString("end_time"));
-					System.out.println("seq"+rs.getInt("schedule_seq")+" // time " +rs.getTime("start_time")+" // "+rs.getString("start_time") );
+					schedule.setRsv_date(rs.getString("rsv_date"));//2021-10-24
+					schedule.setStart_time(rs.getString("start_time").substring(0, 5));//09:00:00 -> 09:00 
+					schedule.setEnd_time(rs.getString("end_time").substring(0, 5));
 					scheduleList.add(schedule);
 				}
 			}

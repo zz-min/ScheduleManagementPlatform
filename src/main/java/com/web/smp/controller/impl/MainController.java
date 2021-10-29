@@ -15,10 +15,14 @@ public class MainController implements ControllerInterface {
 	@Override
 	public String handleRequest(HttpServletRequest request, HttpServletResponse response, SmpService smpService) {
 		HttpSession session = request.getSession(true);
+		
 		String path = request.getRequestURI();
+		String query=request.getQueryString();
+		System.out.println("MainController path >>"+path+"?"+query);
+		
 		String category=request.getParameter("category");
 		String id=request.getParameter("id");
-		System.out.println("MainController path >>"+path);
+		
 		
 		// /main?category=1?id=2202
 		session.setAttribute("categorySession", category);//매번 Main들어올때마다 리셋

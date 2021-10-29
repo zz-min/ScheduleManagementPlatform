@@ -8,6 +8,9 @@
 <link
 	href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700'
 	rel='stylesheet' type='text/css'><!--font-family: 'Roboto' 기본Font사용 URL -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+<!-- Icon사용 URL -->
+
 <link href="/css/common.css" rel="stylesheet" type="text/css">
 <link href="/css/main.css" rel="stylesheet" type="text/css">
 <link href="/css/dialog.css" rel="stylesheet" type="text/css">
@@ -16,13 +19,13 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script><!-- Icon사용 URL -->
-
 <script src="/js/main.js"></script>
 </head>
 <body>
 	<div class="iconContainer">
-		<p id="admin"><i class="fas fa-user-cog fa-3x" id="admin-icon"></i></p><!-- admin페이지로 이동 -->
+		<div id="icon">
+			<i class="fas fa-user-cog fa-3x" id="admin-icon"></i><!-- admin페이지로 이동 -->
+		</div>
 	</div>
 	
 	<div class="titleContainer">
@@ -31,13 +34,13 @@
 	</div>
 
 	<div class="btnContainer">
-		<input type="button" name="studioBtn" value="studio" class="menuBtn" id="category1"/>
-		<input type="button" name="studioBtn" value="rental" class="menuBtn" id="category2"/>
-		<input type="button" name="studioBtn" value="aaa" class="menuBtn" id="category3"/>
-		<input type="button" name="studioBtn" value="bbb" class="menuBtn" id="category4"/>
-		<input type="button" name="studioBtn" value="ccc" class="menuBtn" id="category5"/>
-		<input type="button" name="studioBtn" value="ddd" class="menuBtn" id="category6"/>
-		<input type="button" name="studioBtn" value="eee" class="menuBtn" id="category7"/>
+		<input type="button" name="category" value="studio" class="menuBtn" id="category1"/>
+		<input type="button" name="category" value="rental" class="menuBtn" id="category2"/>
+		<input type="button" name="category" value="aaa" class="menuBtn" id="category3"/>
+		<input type="button" name="category" value="bbb" class="menuBtn" id="category4"/>
+		<input type="button" name="category" value="ccc" class="menuBtn" id="category5"/>
+		<input type="button" name="category" value="ddd" class="menuBtn" id="category6"/>
+		<input type="button" name="category" value="eee" class="menuBtn" id="category7"/>
 	</div>	
 	
  	<!------------------------- studio button - login dialog ------------------------->

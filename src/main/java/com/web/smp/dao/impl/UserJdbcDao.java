@@ -32,11 +32,11 @@ public class UserJdbcDao implements UserDao {
 		Class.forName(driver);
 		conn = DriverManager.getConnection(url, userName, password);
 		
-		System.out.println("LoginJdbcDao  DB연결성공");
+		//System.out.println("UserJdbcDao  DB연결성공");
 	}
 
 	private void disconnect() throws SQLException {
-		System.out.println("LoginJdbcDao  DB연결해제");
+		//System.out.println("UserJdbcDao  DB연결해제");
 		
 		if (rs != null && !rs.isClosed()) {
 			rs.close();
@@ -70,13 +70,11 @@ public class UserJdbcDao implements UserDao {
 				TF=true;
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 				try {
 					disconnect();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
@@ -103,13 +101,11 @@ public class UserJdbcDao implements UserDao {
 				user.setUser_name(rs.getString("user_name"));
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 				try {
 					disconnect();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
@@ -142,13 +138,11 @@ public class UserJdbcDao implements UserDao {
 				}
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 				try {
 					disconnect();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
@@ -159,7 +153,7 @@ public class UserJdbcDao implements UserDao {
 	public String getUserName(String id) {
 		String userName=null;
 		String sql = "select user_name from user where user_id = ?";
-		System.out.println("getUser함수 sql>>"+sql);
+		System.out.println("getUserName함수 sql>>"+sql);
 		try {
 			connect();
 			
@@ -172,13 +166,11 @@ public class UserJdbcDao implements UserDao {
 				userName =rs.getString("user_name");
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 				try {
 					disconnect();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}

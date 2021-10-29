@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 //padStart함수 : 글자수 지정후 비어있는 앞자리에 특정문구로 채우는 함수(String에만 적용)
 //padEnd함수 : 글자수 지정후 비어있는 뒤자리에 특정문구로 채우는 함수(String에만 적용)
 
@@ -55,11 +51,10 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			$(".contentContainer").hide();
 			showSchedule();
 			buildRsvHeader();
-			console.log(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&id=${id}&category=`);
+			console.log(`/api/schedules/${$("#categoryNo").text()}?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&id=${$("#id").text()}`);
 			
-			//fetchData(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&id=${id}`,'rsvList');
-/*			fetchData(`/studio/data?year=${today.getFullYear()}&month=${String(today.getMonth() + 1).padStart(2, '0')}` +
-				`&type=${$("#type").text()}&id=${$("#id").text()}`, 'rsvList');*/
+			fetchData(`/api/schedules/${$("#categoryNo").text()}?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&id=${$("#id").text()}`,'scheduleList');
+
 		} else if ($(".scheduleBtn").val() == "돌아가기") {
 			$(".scheduleBtn").val('스케쥴 현황');
 			$(".mwBtn").val("weekly");
@@ -71,7 +66,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	});
 	$("#checkedMain").change(function() {
 		var v = $("#checkedMain").val();
-		fetchData(`/api/contents/${category}?mainCategory=${v}`, 'category');
+		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
+		fetchData(`/api/contents/${$("#categoryNo").text()}?mainCategory=${encodeURI(encodeURIComponent(v))}`, 'category');
 	});
 	$("#todayBtn").change(function() {
 		$(".weeklyCalendar").show();
@@ -90,10 +86,9 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 	}
 	function weeklySetting(daySet) {
-		alert(daySet);
 		var cnt = 0;
 		for (let i = 7; i < 14; i++) {//0~6
-			$(".dayHeaderContainer").children(":eq(" + i + ")").children().last().text(daySet[cnt++]);
+			$(".dayHeaderContainer").children(":eq(" + i + ")").children().last().html(`&nbsp&nbsp${daySet[cnt++]}`);
 		}
 	}
 
@@ -108,22 +103,22 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 
 					if (oneday.getDay() == 0) {//일요일
 						$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").
-						children().last().children().append(`<li>${value.main_content}-${value.sub_content} ) ${value.rsv_date}  ${value.start_time}~${value.end_time}</li>`);
+						children().last().children().append(`<li>&nbsp&nbsp[ ${value.main_content} - ${value.sub_content} ] ${value.start_time}~${value.end_time}</li>`);
 					} else {//1~6 월~토
 
 						$(".week" + getWeekOfMonth(oneday)).children(":eq(" + (oneday.getDay() - 1) + ")").
-						children().last().children().append(`<li>${value.main_content}-${value.sub_content} ) ${value.rsv_date}  ${value.start_time}~${value.end_time}</li>`);
+						children().last().children().append(`<li>&nbsp&nbsp[ ${value.main_content} - ${value.sub_content} ] ${value.start_time}~${value.end_time}</li>`);
 					}
 				}
 			} else if (pageVal === 'weekly') {
 				// 전혁 - 주간 데이터 끌고올것
 				
-			} else if (pageVal === 'loc') {
+			} else if (pageVal === 'category') {
 				$("#checkedSub").find("option").remove();//기존 옵션 제거하고 새로운  loc에 따른 장소 불러올 것
 				for (var value of json) {
-					$('#checkedSub').append($("<option></option>").attr("value", 2).text(`${value.studiono}`));
+					$('#checkedSub').append($("<option></option>").attr("value", 2).text(`${value}`));
 				}
-			} else if (pageVal === 'rsvList') {
+			} else if (pageVal === 'scheduleList') {
 				$("#scheduleTableBody").empty();//테이블 내용 비우기
 				console.log(json);
 				for (var value of json) {
@@ -131,19 +126,19 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 					add_data += '<tr>';
 
 					add_data += '<td>';
-					add_data += `${value.studioloc} ${value.studiono}호`;
+					add_data += `${value.main_content} - ${value.sub_content}`;
 					add_data += '</td>';
 
 					add_data += '<td>';
-					add_data += `${value.rsvDate}`;
+					add_data += `${value.rsv_date}`;
 					add_data += '</td>';
 
 					add_data += '<td>';
-					add_data += `${value.startTime} ~ ${value.endTime}`;
+					add_data += `${value.start_time} ~ ${value.end_time}`;
 					add_data += '</td>';
 
 					add_data += '</tr>';
-					$("#rsvTableBody").append(add_data);
+					$("#scheduleTableBody").append(add_data);
 				}
 			}
 		}
@@ -175,8 +170,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		//rightSection칸에 month소스 채우기
 		var daySet = makeElementMonth(firstDate);
 		monthlySetting(daySet);
-		
-		//fetchData(`/api/schedules/${session.categorySession}?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
+		fetchData(`/api/schedules/${$("#categoryNo").text()}?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
 	}
 
 	function makeElementMonth(firstDate) {

@@ -22,12 +22,13 @@ public interface SmpService {
 
 	List<Content> getContentList(String query);
 
-	List<String> getMainCategory(int menu_no);
+	List<String> getMainCategory(int category);
 
-	List<String> getMSubCategory(int menu_no);
+	List<String> getSubCategory(String query);
+	List<String> getSubCategory(String category, String main);
 
 	/* Schdule Dao */
 	Schedule getSchedule(int schedule_seq);
 
-	List<AllViewEntity> getScheduleList(String query,String categoryNo);
+	List<AllViewEntity> getScheduleList(String query,String category);
 }

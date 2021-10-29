@@ -32,11 +32,11 @@ public class ContentJdbcDao implements ContentDao {
 		Class.forName(driver);
 		conn = DriverManager.getConnection(url, userName, password);
 		
-		System.out.println("ContentJdbcDao  DB연결성공");
+		//System.out.println("ContentJdbcDao  DB연결성공");
 	}
 
 	private void disconnect() throws SQLException {
-		System.out.println("ContentJdbcDao  DB연결해제");
+		//System.out.println("ContentJdbcDao  DB연결해제");
 		
 		if (rs != null && !rs.isClosed()) {
 			rs.close();
@@ -54,13 +54,11 @@ public class ContentJdbcDao implements ContentDao {
 
 	@Override
 	public Content getContent(int content_seq) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Content> getContentList(String query) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -85,13 +83,11 @@ public class ContentJdbcDao implements ContentDao {
 				}
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 				try {
 					disconnect();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
@@ -99,8 +95,72 @@ public class ContentJdbcDao implements ContentDao {
 	}
 
 	@Override
-	public List<String> getMSubCategory(int menu_no) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> getSubCategory(String query) {
+		List<String> subCategoryList = null;
+
+		String sql = "select * from `content`";
+		sql = sql + (query != null && !query.equals("") ? " WHERE " + query : " ORDER BY sub_content");
+		System.out.println("getSubCategory함수 sql>>" + sql);
+		//select sub_content from `content` WHERE category='2' AND main_content ='노트북'
+		try {
+			connect();
+
+			stmt = conn.prepareStatement( sql);
+			rs = stmt.executeQuery();
+			if (rs.isBeforeFirst()) {
+				subCategoryList = new ArrayList<String>();
+
+				while (rs.next()) {
+					System.out.println(rs.getString("sub_content"));
+					subCategoryList.add(rs.getString("sub_content"));
+				}
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				disconnect();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return subCategoryList;
+	}
+
+	@Override
+	public List<String> getSubCategory(String category, String main) {
+		List<String> subCategoryList = null;
+		System.out.println(category+"  ///  "+main);
+		String sql = "select sub_content from content where category =? AND main_content = ?";
+		System.out.println("FUCKING getSubCategory함수 sql>>" + sql);
+		try {
+			connect();
+			
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, category);
+			stmt.setString(2, main);
+			System.out.println("11");
+			rs = stmt.executeQuery();
+			System.out.println("2");
+			if (rs.isBeforeFirst()) {
+				subCategoryList = new ArrayList<String>();
+				System.out.println("3");
+				while (rs.next()) {
+					System.out.println("4");
+					String content= rs.getString("sub_content");
+					System.out.println(content);
+					subCategoryList.add(content);
+				}
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				disconnect();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return subCategoryList;
 	}
 }

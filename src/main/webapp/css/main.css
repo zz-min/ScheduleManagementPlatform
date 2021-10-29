@@ -9,6 +9,9 @@
 #admin-icon {
 	color: gray;
 }
+#icon{
+	display: inline-block;
+}
 
 /*titleContainer*/
 .titleContainer {

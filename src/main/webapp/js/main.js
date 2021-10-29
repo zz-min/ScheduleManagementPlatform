@@ -5,7 +5,17 @@ $(function() {
 	var script = document.createElement('script');
 	script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 	script.type = 'text/javascript';
+	
+	$(".menuBtn").on("click", function() {
+		$("#checkedCategory").text($(this).attr("id"));
+		userLoginDialog.dialog("open");
+	});
 
+	$("#icon").on("click", function() {
+		 alert("icon클릭");
+		//adminLoginDialog.dialog("open");
+	});
+	
 	var userLoginDialog, userLoginForm;
 	var adminLoginDialog, adminLoginForm;
 
@@ -72,11 +82,5 @@ $(function() {
 			});
 	}
 
-	$(".menuBtn").on("click", function() {
-		$("#checkedCategory").text($(this).attr("id"));
-		userLoginDialog.dialog("open");
-	});
-	$("#admin").on("click", function() {
-		adminLoginDialog.dialog("open");
-	});
+	
 });

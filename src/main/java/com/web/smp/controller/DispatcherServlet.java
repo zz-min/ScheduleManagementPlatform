@@ -68,7 +68,6 @@ public class DispatcherServlet extends HttpServlet {
 		ControllerInterface handler = mapper.getHandler(path);
 
 		if (path.contains("api")) {// REST API 기술
-			System.out.println("IN REST API");
 			String data = handler.handleRequest(request, response, smpService);
 			
 			// step #3. output processing results
@@ -76,7 +75,6 @@ public class DispatcherServlet extends HttpServlet {
 			response.getWriter().write(data);
 
 		} else {//페이지 이동
-			System.out.println("IN PAGE MOVE");
 			if (handler != null) {
 				viewName = handler.handleRequest(request, response, smpService);
 			}

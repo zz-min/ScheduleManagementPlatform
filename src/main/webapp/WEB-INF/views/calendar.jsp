@@ -68,6 +68,7 @@
 					<div>
 						<span id="id">${id}</span>
 					</div>
+						<span id="categoryNo">${categorySession}</span>
 				</div>
 				<input type="button" value="스케쥴 현황" class="scheduleBtn" />
 			</div>
