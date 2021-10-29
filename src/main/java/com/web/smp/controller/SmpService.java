@@ -2,6 +2,7 @@ package com.web.smp.controller;
 
 import java.util.List;
 
+import com.web.smp.di.entity.AllViewEntity;
 import com.web.smp.di.entity.Content;
 import com.web.smp.di.entity.Schedule;
 import com.web.smp.di.entity.User;
@@ -28,5 +29,5 @@ public interface SmpService {
 	/* Schdule Dao */
 	Schedule getSchedule(int schedule_seq);
 
-	List<Schedule> getScheduleList(String query,String categoryNo);
+	List<AllViewEntity> getScheduleList(String query,String categoryNo);
 }

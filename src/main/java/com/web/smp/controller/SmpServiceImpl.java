@@ -5,6 +5,7 @@ import java.util.List;
 import com.web.smp.dao.interf.ContentDao;
 import com.web.smp.dao.interf.ScheduleDao;
 import com.web.smp.dao.interf.UserDao;
+import com.web.smp.di.entity.AllViewEntity;
 import com.web.smp.di.entity.Content;
 import com.web.smp.di.entity.Schedule;
 import com.web.smp.di.entity.User;
@@ -71,7 +72,7 @@ public class SmpServiceImpl implements SmpService {
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(String query, String categoryNo) {
+	public List<AllViewEntity> getScheduleList(String query, String categoryNo) {
 		return scheduleDao.getScheduleList(query,categoryNo);
 	}
 	

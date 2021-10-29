@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.cj.conf.BooleanPropertyDefinition.AllowableValues;
 import com.web.smp.dao.interf.ScheduleDao;
+import com.web.smp.di.entity.AllViewEntity;
 import com.web.smp.di.entity.Schedule;
 
 public class ScheduleJdbcDao implements ScheduleDao {
@@ -59,11 +61,11 @@ public class ScheduleJdbcDao implements ScheduleDao {
 	}
 
 	@Override
-	public List<Schedule> getScheduleList(String query,String categoryNo) {
+	public List<AllViewEntity> getScheduleList(String query,String categoryNo) {
 		//view에 따라서 출력 - v_schedule_for1
-		List<Schedule> scheduleList = null;
-		String sql = "select * from v_schedule_for"+categoryNo;
-		sql = sql + (query != null && !query.equals("") ? " WHERE " + query : " ORDER BY rsv_date");
+		List<AllViewEntity> scheduleList = null;
+		String sql = "select * from v_schedule_all";
+		sql = sql + (query != null && !query.equals("") ? " WHERE category = "+categoryNo +" AND "+ query : " ORDER BY rsv_date");
 		
 		System.out.println("getScheduleList함수 sql>>" + sql);
 		try {
@@ -72,17 +74,21 @@ public class ScheduleJdbcDao implements ScheduleDao {
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			if (rs.isBeforeFirst()) {
-				scheduleList = new ArrayList<Schedule>();
+				scheduleList = new ArrayList<AllViewEntity>();
 
 				while (rs.next()) {
-					Schedule schedule = new Schedule();
+					AllViewEntity schedule = new AllViewEntity();
 					schedule.setSchedule_seq(rs.getInt("schedule_seq"));
-					schedule.setContent_no(rs.getInt("content_no"));
+					schedule.setCategory(rs.getInt("category"));
+					schedule.setMain_content(rs.getString("main_content"));
+					schedule.setSub_content(rs.getString("sub_content"));
+					schedule.setUser_type(rs.getString("user_type"));
 					schedule.setUser_id(rs.getString("user_id"));
+					schedule.setUser_name(rs.getString("user_name"));
 					schedule.setRsv_date(rs.getString("rsv_date"));
-					schedule.setStart_time(rs.getTime("start_time"));
-					schedule.setEnd_time(rs.getTime("end_time"));
-
+					schedule.setStart_time(rs.getString("start_time"));
+					schedule.setEnd_time(rs.getString("end_time"));
+					System.out.println("seq"+rs.getInt("schedule_seq")+" // time " +rs.getTime("start_time")+" // "+rs.getString("start_time") );
 					scheduleList.add(schedule);
 				}
 			}

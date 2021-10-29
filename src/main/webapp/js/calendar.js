@@ -15,7 +15,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	let lastDay;//이번 달의 마지막 날
 	let prevLastDay;//지난 달의 마지막 날
 
-
 	$("#prev").click(function() {
 		if ($(".mwBtn").val() == 'weekly') {
 			clickMonth(-1);
@@ -39,9 +38,11 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	$(".mwBtn").click(function() {
 		if ($(".mwBtn").val() == 'weekly') {
 			$(".mwBtn").val('monthly');// 버튼 라벨 바꾸고
+			showWeek();
 			buildWeek(0);//화면에 weekly띄우기
 		} else {
 			$(".mwBtn").val('weekly');// 버튼 라벨 바꾸고
+			showMonth();
 			buildMonth();//화면에 monthly띄우기
 		}
 	});
@@ -78,35 +79,19 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	});
 
 	//////////ajax		
-	async function fetchPage(url, daySet, pageVal) {//페이지 전환
-		console.log("async await 함수-페이지 전환");
-		try {
-			const response = await fetch(url);
-			const text = await response.text();
-			await $(".rightSection").html(text);
-		} catch (err) {
-			console.log(err);
-		}
-		if (pageVal === 'monthly') {
-			monthlySetting(daySet);
-		} else if (pageVal === 'weekly') {
-			weeklySetting(daySet);
-		}
-	}
-
 	function monthlySetting(daySet) {
 		var cnt = 0;
 		for (let i = 1; i < 7; i++) {//1~6주차를 위해 6번 반복     
 			for (let j = 0; j < 7; j++) {//일요일~토요일을 위해 7번 반복
 				$(".week" + i).children(":eq(" + j + ")").children().first().text(daySet[cnt++]);
-				$(".week" + i).children(":eq(" + j + ")").children().last().html('<ul id="dayRscList"><li>li태그 테스트</li></ul>');
+				$(".week" + i).children(":eq(" + j + ")").children().last().html('<ul id="dayRscList"></ul>');
 			}
 		}
 	}
 	function weeklySetting(daySet) {
 		var cnt = 0;
 		for (let i = 0; i < 7; i++) {//0~6
-			$("#dayoftheweek" + i).text(daySet[cnt++]);
+			$("#dayHeaderContainer").text(daySet[cnt++]);
 		}
 	}
 
@@ -118,27 +103,19 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			if (pageVal === 'monthly') {
 				for (var value of json) {
 					console.log(value);
+					console.log(value.rsv_date);
 
 					var day = value.rsv_date.substr(8, 2);
 					var oneday = new Date(today.getFullYear(), today.getMonth(), day);
 
 					if (oneday.getDay() == 0) {//일요일
-						$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").children().last()
-							.children().append(`<li>${value.start_time}~${value.end_time}</li>`);
+						$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").
+						children().last().children().append(`<li>${value.main_content}-${value.sub_content} ) ${value.rsv_date}  ${value.start_time}~${value.end_time}</li>`);
 					} else {//1~6 월~토
 
-						$(".week" + getWeekOfMonth(oneday)).children(":eq(" + (oneday.getDay() - 1) + ")").children().last()
-							.children().append(`<li>${value.start_time}~${value.end_time}</li>`);
+						$(".week" + getWeekOfMonth(oneday)).children(":eq(" + (oneday.getDay() - 1) + ")").
+						children().last().children().append(`<li>${value.main_content}-${value.sub_content} ) ${value.rsv_date}  ${value.start_time}~${value.end_time}</li>`);
 					}
-					/*if (oneday.getDay() == 0) {//일요일
-						$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").children().last()
-							.children().append(`<li>${value.studioloc} ${value.studiono}호)${value.startTime}~${value.endTime}</li>`);
-					} else {//1~6 월~토
-
-						$(".week" + getWeekOfMonth(oneday)).children(":eq(" + (oneday.getDay() - 1) + ")").children().last()
-							.children().append(`<li>${value.studioloc} ${value.studiono}호)${value.startTime}~${value.endTime}</li>`);
-					}*/
-
 				}
 			} else if (pageVal === 'weekly') {
 				// 전혁 - 주간 데이터 끌고올것
@@ -188,9 +165,9 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		$(".userScheduleContainer").show();
 	}
 	//////////달력 - monthly	
+	showMonth();
 	buildMonth();
 	function buildMonth() {
-		showMonth();
 		firstDate = new Date(today.getFullYear(), today.getMonth(), 1, today.getDay());//2021.9.1.2(수)
 		lastDay = new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0).getDate();//9/30 3(목)
 		prevLastDay = new Date(firstDate.getFullYear(), firstDate.getMonth(), 0).getDate();//8/31 1(화)
@@ -198,11 +175,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 
 		//rightSection칸에 month소스 채우기
 		var daySet = makeElementMonth(firstDate);
-		//fetchPage('../js/monthForm.txt',daySet,'monthly');
-		// class -  monthlyCalendar
-		//alert(today.getFullYear()+"년"+String(today.getMonth()+1).padStart(2,'0')+"월의 데이터 전송");
+		monthlySetting(daySet);
 		
-		//alert(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`);
 		fetchData(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
 	}
 
@@ -250,7 +224,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 	//////////달력 - weekly	
 	function buildWeek(week) {
-		showWeek();
 		today.setDate(today.getDate() + week * 7);
 		let title = "&nbsp;" + today.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;" + (today.getMonth() + 1) + "월&nbsp;(주)";
 
@@ -265,9 +238,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 
 		//rightSection칸에 week소스 채우기
 		var daySet = makeElementWeek(0);
-		//fetchPage('../js/weekForm.txt', daySet,'weekly');
-		// class -  weeklyCalendar
-		//console.log(daySet);
+		weeklySetting(daySet);
 	}
 
 	function makeElementWeek(week) {
@@ -284,7 +255,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			daySet[cnt] = `${weekDate.getDate()}`;
 			weekDate.setDate(weekDate.getDate() + 1);//날짜 증가시키기
 		}
-
 		return daySet;
 	}
 
@@ -298,7 +268,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 
 	function removeCalendarMonth() {//Monthly내부에 달력내용만 지우기
-		let divEls1 = document.querySelectorAll('.calendar__day');
+		let divEls1 = document.querySelectorAll('.calendar_day');
 		let divEls2 = document.querySelectorAll('.calendarWeekContainer');
 		for (var value of divEls1) {
 			value.remove();
@@ -320,7 +290,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		today = new Date(today.getFullYear(), today.getMonth() + cnt, today.getDate());
 		console.log("변경된 today데이터 : " + today);
 		console.log("변경된 today데이터 달: " + today.getMonth());
-		removeCalendarMonth();
 		buildMonth();
 	}
 
@@ -330,6 +299,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 
 	function clickRsv(cnt) {
 		today = new Date(today.getFullYear(), today.getMonth() + cnt, today.getDate());
-		removeCalendarMonth();
+		//removeCalendarMonth();
 	}
 });

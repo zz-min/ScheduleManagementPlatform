@@ -52,5 +52,6 @@
 .calendar_day>span:last-child {
 	height:65%;
 	overflow-y:scroll;
+	overflow-x:clip;
 	font-size: 0.8em;
 }

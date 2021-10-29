@@ -31,7 +31,7 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script src="/js/calendar.js?jn"></script>
+<script src="/js/calendar.js?D"></script>
 <body>
 	<!--------------- HEADER ⊃  calendar_title,calendar_main-------------->
 	<div class="headerContainer">
@@ -133,7 +133,7 @@
 						<div class="dayHeaderContainer">
 							<c:forEach var="item" items="${days}" varStatus="idx">
 								<div class="dayHeader">
-									<span>${item}</span><span id="dayoftheweek">NoneData</span>
+									<span>${item}</span><span id="dayoftheweek${idx}">NoneData</span>
 								</div>
 							</c:forEach>
 						</div>

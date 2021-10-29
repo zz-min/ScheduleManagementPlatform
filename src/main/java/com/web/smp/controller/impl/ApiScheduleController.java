@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.smp.controller.SmpService;
-import com.web.smp.di.entity.Schedule;
+import com.web.smp.di.entity.AllViewEntity;
 
 public class ApiScheduleController implements ControllerInterface {
 
@@ -43,7 +43,7 @@ public class ApiScheduleController implements ControllerInterface {
 			// 해당가져오기
 			if (week.equals("0")) {
 				String sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month;
-				List<Schedule> scheduleList = smpService.getScheduleList(sql, categoryNo);// 로그인 유효성 검사
+				List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리에 전체 스케쥴정보
 				try {
 					returnMassage = mapper.writeValueAsString(scheduleList);
 					System.out.println("DataController 한달내용전체조회>>" + returnMassage);
