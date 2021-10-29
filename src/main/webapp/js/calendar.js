@@ -55,10 +55,11 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			$(".contentContainer").hide();
 			showSchedule();
 			buildRsvHeader();
-			//fetchPage('../js/userPageForm.txt', null,'rsvList');
-			//
-			fetchData(`/studio/data?year=${today.getFullYear()}&month=${String(today.getMonth() + 1).padStart(2, '0')}` +
-				`&type=${$("#type").text()}&id=${$("#id").text()}`, 'rsvList');
+			console.log(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&id=${id}&category=`);
+			
+			//fetchData(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&id=${id}`,'rsvList');
+/*			fetchData(`/studio/data?year=${today.getFullYear()}&month=${String(today.getMonth() + 1).padStart(2, '0')}` +
+				`&type=${$("#type").text()}&id=${$("#id").text()}`, 'rsvList');*/
 		} else if ($(".scheduleBtn").val() == "돌아가기") {
 			$(".scheduleBtn").val('스케쥴 현황');
 			$(".mwBtn").val("weekly");
@@ -70,7 +71,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	});
 	$("#checkedMain").change(function() {
 		var v = $("#checkedMain").val();
-		fetchData(`/studio/data?loc=${v}`, 'loc');
+		fetchData(`/api/contents/${category}?mainCategory=${v}`, 'category');
 	});
 	$("#todayBtn").change(function() {
 		$(".weeklyCalendar").show();
@@ -89,22 +90,19 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 	}
 	function weeklySetting(daySet) {
+		alert(daySet);
 		var cnt = 0;
-		for (let i = 0; i < 7; i++) {//0~6
-			$("#dayHeaderContainer").text(daySet[cnt++]);
+		for (let i = 7; i < 14; i++) {//0~6
+			$(".dayHeaderContainer").children(":eq(" + i + ")").children().last().text(daySet[cnt++]);
 		}
 	}
 
 	async function fetchData(url, pageVal) {
 		const response = await fetch(url);
 		const json = await response.json();
-		console.log(json);
 		if (json != null) {
 			if (pageVal === 'monthly') {
 				for (var value of json) {
-					console.log(value);
-					console.log(value.rsv_date);
-
 					var day = value.rsv_date.substr(8, 2);
 					var oneday = new Date(today.getFullYear(), today.getMonth(), day);
 
@@ -119,13 +117,14 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 				}
 			} else if (pageVal === 'weekly') {
 				// 전혁 - 주간 데이터 끌고올것
+				
 			} else if (pageVal === 'loc') {
 				$("#checkedSub").find("option").remove();//기존 옵션 제거하고 새로운  loc에 따른 장소 불러올 것
 				for (var value of json) {
 					$('#checkedSub').append($("<option></option>").attr("value", 2).text(`${value.studiono}`));
 				}
 			} else if (pageVal === 'rsvList') {
-				$("#rsvTableBody").empty();//테이블 내용 비우기
+				$("#scheduleTableBody").empty();//테이블 내용 비우기
 				console.log(json);
 				for (var value of json) {
 					var add_data = '';
@@ -177,7 +176,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		var daySet = makeElementMonth(firstDate);
 		monthlySetting(daySet);
 		
-		fetchData(`/api/schedules?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
+		//fetchData(`/api/schedules/${session.categorySession}?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
 	}
 
 	function makeElementMonth(firstDate) {

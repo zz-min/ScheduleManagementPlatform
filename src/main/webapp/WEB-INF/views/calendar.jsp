@@ -133,7 +133,7 @@
 						<div class="dayHeaderContainer">
 							<c:forEach var="item" items="${days}" varStatus="idx">
 								<div class="dayHeader">
-									<span>${item}</span><span id="dayoftheweek${idx}">NoneData</span>
+									<span>${item}</span><span class="dayoftheweek">NoneData</span>
 								</div>
 							</c:forEach>
 						</div>
@@ -146,7 +146,7 @@
 			<!-- schedule form -->
 			<div class="userScheduleContainer">
 				<h1>내 스케쥴 현황</h1>
-				<div id="rsvList">
+				<div id="scheduleList">
 					<table border="1">
 						<thead>
 							<tr>
@@ -155,7 +155,7 @@
 								<th>시간</th>
 							</tr>
 						</thead>
-						<tbody id="rsvTableBody">
+						<tbody id="scheduleTableBody">
 
 						</tbody>
 					</table>

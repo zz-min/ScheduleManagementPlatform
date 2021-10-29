@@ -22,7 +22,7 @@
 </head>
 <body>
 	<div class="iconContainer">
-		<i class="fas fa-user-cog fa-3x" id="admin-icon"></i><!-- admin페이지로 이동 -->
+		<p id="admin"><i class="fas fa-user-cog fa-3x" id="admin-icon"></i></p><!-- admin페이지로 이동 -->
 	</div>
 	
 	<div class="titleContainer">

@@ -70,14 +70,13 @@ $(function() {
 					window.location.assign("/main?category=" + index+"&id="+$("#userId").val());
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});
-
 	}
 
 	$(".menuBtn").on("click", function() {
 		$("#checkedCategory").text($(this).attr("id"));
 		userLoginDialog.dialog("open");
 	});
-	$("#admin-icon").on("click", function() {
+	$("#admin").on("click", function() {
 		adminLoginDialog.dialog("open");
 	});
 });

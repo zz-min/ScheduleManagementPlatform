@@ -69,7 +69,7 @@ public class ContentJdbcDao implements ContentDao {
 		List<String> mainCategoryList=null;
 		
 		String sql = "select DISTINCT main_content from content where category= ? ";
-		System.out.println("getUserList함수 sql>>"+sql);
+		System.out.println("getMainCategory함수 sql>>"+sql);
 		try {
 			connect();
 			

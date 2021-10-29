@@ -21,7 +21,7 @@ public class MainController implements ControllerInterface {
 		System.out.println("MainController path >>"+path);
 		
 		// /main?category=1?id=2202
-		session.setAttribute("category", category);//매번 Main들어올때마다 리셋
+		session.setAttribute("categorySession", category);//매번 Main들어올때마다 리셋
 		
 		//로그인 정보-id와 name 세션에 담기
 		session.setAttribute("id", id);
