@@ -25,7 +25,6 @@ public interface SmpService {
 	List<String> getMainCategory(int category);
 
 	List<String> getSubCategory(String query);
-	List<String> getSubCategory(String category, String main);
 
 	/* Schdule Dao */
 	Schedule getSchedule(int schedule_seq);

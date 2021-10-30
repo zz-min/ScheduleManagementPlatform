@@ -21,7 +21,7 @@
 	</context-param>
 	<context-param>
 		<param-name>db_url</param-name>
-		<param-value>jdbc:mysql://db-smp.ctqcwujeqj0t.ap-northeast-2.rds.amazonaws.com:3306/web</param-value>
+		<param-value>jdbc:mysql://db-smp.ctqcwujeqj0t.ap-northeast-2.rds.amazonaws.com:3306/web?characterEncoding=UTF-8</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db_userid</param-name>

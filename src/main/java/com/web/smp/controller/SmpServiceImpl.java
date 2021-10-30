@@ -64,11 +64,6 @@ public class SmpServiceImpl implements SmpService {
 	public List<String> getSubCategory(String query) {
 		return contentDao.getSubCategory(query);
 	}
-	
-	@Override
-	public List<String> getSubCategory(String category, String main) {
-		return contentDao.getSubCategory( category, main);
-	}
 
 	/* Schdule Dao */
 	@Override

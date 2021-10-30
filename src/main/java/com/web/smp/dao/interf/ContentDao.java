@@ -12,6 +12,5 @@ public interface ContentDao {
 	List<String> getMainCategory(int category);
 
 	List<String> getSubCategory(String query);
-	List<String> getSubCategory(String category, String main );
 
 }

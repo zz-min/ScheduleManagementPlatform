@@ -63,7 +63,7 @@ public class ContentJdbcDao implements ContentDao {
 	}
 
 	@Override
-	public List<String> getMainCategory(int menu_no) {
+	public List<String> getMainCategory(int category) {
 		List<String> mainCategoryList=null;
 		
 		String sql = "select DISTINCT main_content from content where category= ? ";
@@ -72,13 +72,14 @@ public class ContentJdbcDao implements ContentDao {
 			connect();
 			
 			stmt =  conn.prepareStatement(sql);
-			stmt.setInt(1, menu_no);
+			stmt.setInt(1, category);
 			rs = stmt.executeQuery();
 			
 			if (rs.isBeforeFirst()) {
 				mainCategoryList=new ArrayList<String>();
 				
 				while(rs.next()) {
+					System.out.println(rs.getString("main_content"));
 					mainCategoryList.add(rs.getString("main_content"));
 				}
 			}
@@ -98,10 +99,10 @@ public class ContentJdbcDao implements ContentDao {
 	public List<String> getSubCategory(String query) {
 		List<String> subCategoryList = null;
 
-		String sql = "select * from `content`";
+		String sql = "select sub_content from content";
 		sql = sql + (query != null && !query.equals("") ? " WHERE " + query : " ORDER BY sub_content");
-		System.out.println("getSubCategory함수 sql>>" + sql);
-		//select sub_content from `content` WHERE category='2' AND main_content ='노트북'
+		//String sql = "select sub_content from content WHERE "+ query;
+		System.out.println("getSubCategory함수1 sql>>" + sql);
 		try {
 			connect();
 
@@ -109,9 +110,7 @@ public class ContentJdbcDao implements ContentDao {
 			rs = stmt.executeQuery();
 			if (rs.isBeforeFirst()) {
 				subCategoryList = new ArrayList<String>();
-
 				while (rs.next()) {
-					System.out.println(rs.getString("sub_content"));
 					subCategoryList.add(rs.getString("sub_content"));
 				}
 			}
@@ -127,40 +126,4 @@ public class ContentJdbcDao implements ContentDao {
 		return subCategoryList;
 	}
 
-	@Override
-	public List<String> getSubCategory(String category, String main) {
-		List<String> subCategoryList = null;
-		System.out.println(category+"  ///  "+main);
-		String sql = "select sub_content from content where category =? AND main_content = ?";
-		System.out.println("FUCKING getSubCategory함수 sql>>" + sql);
-		try {
-			connect();
-			
-			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, category);
-			stmt.setString(2, main);
-			System.out.println("11");
-			rs = stmt.executeQuery();
-			System.out.println("2");
-			if (rs.isBeforeFirst()) {
-				subCategoryList = new ArrayList<String>();
-				System.out.println("3");
-				while (rs.next()) {
-					System.out.println("4");
-					String content= rs.getString("sub_content");
-					System.out.println(content);
-					subCategoryList.add(content);
-				}
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				disconnect();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return subCategoryList;
-	}
 }

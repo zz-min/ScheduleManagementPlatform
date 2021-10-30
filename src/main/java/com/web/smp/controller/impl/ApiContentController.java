@@ -28,7 +28,7 @@ public class ApiContentController implements ControllerInterface {
 		String query=request.getQueryString();
 		System.out.println("ApiContentController path >>"+path+"?"+query);
 		
-		String categoryNo=temp[3];
+		int categoryNo= Integer.parseInt(temp[3]);
 		String mainCategory=null;
 		try {//카테고리이름 한글 디코딩처리 - URLDecoder.decode(NAME, "UTF-8")
 			mainCategory = URLDecoder.decode(request.getParameter("mainCategory"), "UTF-8");
@@ -65,10 +65,9 @@ public class ApiContentController implements ControllerInterface {
 				if (query == null) {// /api/contents/[카테고리번호] - 특정 category 에서만 사용되는 contents 정보가져오기
 
 				} else if (query != null) {// /api/contents/[카테고리번호] ? mainCategory= '웹캠' - 매인카테고리에 해당되는 서브카테고리 contents 정보가져오기
-					String sql = "category='"+categoryNo+"' AND main_content ='"+mainCategory+"'";
+					String sql = "category="+categoryNo+" AND main_content ='"+mainCategory+"'";
 					System.out.println(sql);
-//					List<String> scheduleList = smpService.getSubCategory(sql);
-					List<String> scheduleList = smpService.getSubCategory(categoryNo,mainCategory);
+					List<String> scheduleList = smpService.getSubCategory(sql);
 					try {
 						returnMassage = mapper.writeValueAsString(scheduleList);
 					} catch (JsonProcessingException e) {
