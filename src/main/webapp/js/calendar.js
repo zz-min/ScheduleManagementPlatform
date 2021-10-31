@@ -10,7 +10,38 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	let firstDate;//이번 달의 첫 날
 	let lastDay;//이번 달의 마지막 날
 	let prevLastDay;//지난 달의 마지막 날
-
+	var rsvDialog, rsvForm;
+	var rsvField= $([]).add("#userId").add("#userPwd");
+	
+	rsvDialog = $("#rsv-dialog-form").dialog({
+		autoOpen : false,
+		height : 300,
+		width : 450,
+		modal : true,
+		buttons : {
+			"확인" : function() {
+				rsvForm.trigger("submit");
+			},
+			"취소" : function() {
+				rsvForm.dialog("close");
+			}
+		},
+		close : function() {
+			//rsvField.removeClass("ui-state-error");
+		}
+	});
+	
+	rsvForm = rsvDialog.find("form").on("submit", function(event) {
+		var valid = true;
+		userLoginField.removeClass("ui-state-error");
+		
+		valid = valid && checkLength( $("#userId"), 5, 15);
+		valid = valid && checkLength( $("#userPwd"), 4, 20);
+		if (valid) {
+			userLoginDialog.dialog("close");
+		}
+		return valid;
+	});
 	$("#prev").click(function() {
 		if ($(".mwBtn").val() == 'weekly') {
 			clickMonth(-1);
@@ -70,9 +101,15 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		fetchData(`/api/contents/${$("#categoryNo").text()}?mainCategory=${encodeURI(encodeURIComponent(v))}`, 'category');
 	});
 	$("#todayBtn").change(function() {
-		$(".weeklyCalendar").show();
-		$(".weeklyCalendar").hide();
-		$(".weeklyCalendar").toggle();
+		
+	});
+	$(".calendar_day").on("click",function(){
+		rsvDialog.dialog("open");
+		$("#rsv-dialog-date").text($("#current-year-month").text());
+		$("#rsv-dialog-date2").text(today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text());
+		console.log(today);
+		console.log("today >> "+today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text());
+		
 	});
 
 	//////////ajax		

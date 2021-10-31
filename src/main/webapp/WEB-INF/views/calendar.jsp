@@ -109,8 +109,8 @@
 					</c:forEach>
 				</div>
 				<c:forEach var="i" begin="0" end="5">
-					<div class='calendarWeekContainer week${i+1}'>
-						<c:forEach var="i" begin="0" end="6">
+					<div class='calendarWeekContainer week${i+1}'><!-- week 1 ~ 6 -->
+						<c:forEach var="j" begin="0" end="6">
 							<div class='calendar_day'>
 								<span></span><span></span>
 							</div>
@@ -165,5 +165,13 @@
 			
 		</div><!-- rightSection END -->
 	</div><!-- sectionContainer END -->
+	
+	<!-------------------------- RSV dialog ------------------------->
+	<div id="rsv-dialog-form" class="dialog" title="예약현황">
+		<h1 id ="rsv-dialog-date"></h1>
+		<h2 id ="rsv-dialog-date2"></h2>
+	
+			
+	</div><!-- rsv-dialog-form END-->
 </body>
 </html>

@@ -43,7 +43,7 @@
 		<input type="button" name="category" value="eee" class="menuBtn" id="category7"/>
 	</div>	
 	
- 	<!------------------------- studio button - login dialog ------------------------->
+ 	<!------------------------- category button - login dialog ------------------------->
 	<div id="user-login-dialog-form" class="dialog" title="로그인">
 		<div class="login_property">
 			<div id="loginPropertyLeft" style="display: inline-block">
