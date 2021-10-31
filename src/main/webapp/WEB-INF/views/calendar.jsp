@@ -75,12 +75,12 @@
 			<div class="contentContainer">
 				<form>
 					<select name="checkedMain" id="checkedMain" class="checkedContent">
-						<option value="none">== 건물 선택 ==</option>
+						<option value="none">== 매인 카테고리 선택 ==</option>
 						<c:forEach var="i" begin="0" end="${fn:length(mainContentList)-1}">
 							<option value="${mainContentList[i]}">${mainContentList[i]}</option>
 						</c:forEach>
 					</select> <select name="checkedSub" id="checkedSub" class="checkedContent">
-						<option value="none">== 건물을 먼저 선택해주세요 ==</option>
+						<option value="none">== 매인 카테고리를 먼저 선택해주세요 ==</option>
 					</select>
 				</form>
 			</div>
@@ -169,9 +169,25 @@
 	<!-------------------------- RSV dialog ------------------------->
 	<div id="rsv-dialog-form" class="dialog" title="예약현황">
 		<h1 id ="rsv-dialog-date"></h1>
-		<h2 id ="rsv-dialog-date2"></h2>
-	
-			
+		<h2>스케쥴 현황</h2>
+		<br>
+		<h2>❤❤예약중</h2>
+		<h4>list</h4>
+		<h2>❤❤예약하기</h2>
+		<h4>list</h4>
+		<form>
+			<select name="checkedMain" id="checkedMain" class="checkedContent">
+				<option value="none">== 매인 카테고리 선택 ==</option>
+				<c:forEach var="i" begin="0" end="${fn:length(mainContentList)-1}">
+					<option value="${mainContentList[i]}">${mainContentList[i]}</option>
+				</c:forEach>
+			</select> <select name="checkedSub" id="checkedSub" class="checkedContent">
+				<option value="none">== 매인 카테고리를 먼저 선택해주세요 ==</option>
+			</select>
+			<p><input type="time" value="09:00" min="09:00:00" max="19:00:00"></p>
+		</form>
+
+
 	</div><!-- rsv-dialog-form END-->
 </body>
 </html>

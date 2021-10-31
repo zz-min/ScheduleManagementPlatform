@@ -15,8 +15,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	
 	rsvDialog = $("#rsv-dialog-form").dialog({
 		autoOpen : false,
-		height : 300,
-		width : 450,
+		height : 800,
+		width : 600,
 		modal : true,
 		buttons : {
 			"확인" : function() {
@@ -105,10 +105,9 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	});
 	$(".calendar_day").on("click",function(){
 		rsvDialog.dialog("open");
-		$("#rsv-dialog-date").text($("#current-year-month").text());
-		$("#rsv-dialog-date2").text(today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text());
-		console.log(today);
-		console.log("today >> "+today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text());
+		$("#rsv-dialog-date").text(`${today.getFullYear()}년 ${String(today.getMonth()+1).padStart(2,'0')}월 ${$(this).children().first().text()}일`);
+		//today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text()
+		
 		
 	});
 
