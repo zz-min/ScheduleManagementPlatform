@@ -36,6 +36,7 @@ public class ApiScheduleController implements ControllerInterface {
 		// /api/schedules/[카테고리번호] - 특정 category 에서만 사용되는 schedules 정보가져오기
 		// /api/schedules/[카테고리번호] ? id=2018  &  year=x & month=x
 		// /api/schedules/[카테고리번호] ? year=x & month=x & week=0  
+		// /api/schedules/[카테고리번호] ? serchSelect = user_name & textValue=홍길동
 		
 		// POST
 		// /api/schedules - 새로운 schedules 정보 생성하기

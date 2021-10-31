@@ -29,6 +29,7 @@ public class ApiContentController implements ControllerInterface {
 		System.out.println("ApiContentController path >>"+path+"?"+query);
 		
 		int categoryNo= Integer.parseInt(temp[3]);
+		
 		String mainCategory=null;
 		try {//카테고리이름 한글 디코딩처리 - URLDecoder.decode(NAME, "UTF-8")
 			mainCategory = URLDecoder.decode(request.getParameter("mainCategory"), "UTF-8");
