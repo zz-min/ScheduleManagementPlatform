@@ -1,5 +1,14 @@
 @charset "UTF-8";
-
+:root{
+	--color-white:#ffffff;
+	--color-black:#000000;
+	--color-green1:#9DC3C1;
+	--color-green2:#93D3C2;
+	--color-green3:#96E1B8;
+	--color-green4:#AAECA4;
+	--color-green5:#CCF48A;
+	--color-yellow:#F9F871;
+}
 body {
 	margin: 0;
 	padding: 0;
