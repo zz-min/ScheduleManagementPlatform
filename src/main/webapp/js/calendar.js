@@ -13,6 +13,16 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	var rsvDialog, rsvForm;
 	var rsvField= $([]).add("#userId").add("#userPwd");
 	
+	// Week 처리를 위한 변수
+	let month;
+	let firstWeekDay;
+	let lastWeekDay
+	let temp_month = month;
+	
+	// json 데이터 처리를 위한 변수
+	let temp_loc;
+	let temp_locno;
+	
 	rsvDialog = $("#rsv-dialog-form").dialog({
 		autoOpen : false,
 		height : 800,
@@ -20,10 +30,10 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		modal : true,
 		buttons : {
 			"확인" : function() {
-				rsvForm.trigger("submit");
+				//rsvForm.trigger("submit");
 			},
 			"취소" : function() {
-				rsvForm.dialog("close");
+				//rsvForm.dialog("close");
 			}
 		},
 		close : function() {
@@ -35,8 +45,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		var valid = true;
 		userLoginField.removeClass("ui-state-error");
 		
-		valid = valid && checkLength( $("#userId"), 5, 15);
-		valid = valid && checkLength( $("#userPwd"), 4, 20);
+		//valid = valid && checkLength( $("#userId"), 5, 15);
+		//valid = valid && checkLength( $("#userPwd"), 4, 20);
 		if (valid) {
 			userLoginDialog.dialog("close");
 		}
@@ -96,10 +106,17 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 	});
 	$("#checkedMain").change(function() {
+		//alert("Dialog");
 		var v = $("#checkedMain").val();
 		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
 		fetchData(`/api/contents/${$("#categoryNo").text()}?mainCategory=${encodeURI(encodeURIComponent(v))}`, 'category');
 	});
+	$("#checkedMainDialog").change(function() {
+		//alert("Dialog");
+		var v = $("#checkedMainDialog").val();
+		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
+		fetchData(`/api/contents/${$("#categoryNo").text()}?mainCategory=${encodeURI(encodeURIComponent(v))}`, 'categoryDialog');
+	});	
 	$("#todayBtn").change(function() {
 		
 	});
@@ -148,11 +165,84 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 				}
 			} else if (pageVal === 'weekly') {
 				// 전혁 - 주간 데이터 끌고올것
-				
+				console.log("weekly 실행");
+				var temp = "";
+
+				$(".timeLineItemValue").css("background-color", "white"); // select 값이나 주가 변경되면 타임테이블 배경색을 흰색으로 초기화
+				$(".timeLineItemValueFirst").css("background-color", "white"); // select 값이나 주가 변경되면 타임테이블 배경색을 흰색으로 초기화
+
+				for (var value of json) {
+					if (`${value.main_content}` == temp_loc && `${value.sub_content}` == temp_locno) {
+						console.log("weekly json 처리 실행");
+						let day = value.rsv_date.substr(8, 2);
+
+						for (let cnt = 0; cnt < 7; cnt++) {
+							let test = $('.dayoftheweek' + cnt).text();
+							test = test.trim();
+
+							if (test.length == 1) { // 만약 가지고 온 일 데이터가 한자리면 앞에 0을 붙여 2자리로 만들어줌
+								test = "0" + test;
+							}
+
+							if (day == test) {
+								// start time 추출
+								let s_hour = `${value.start_time}`;
+								s_hour = s_hour.substr(0, 2);
+								let s_minute = `${value.start_time}`;
+								s_minute = s_minute.substr(3, 2);
+								console.log("s_hour : " + s_hour + " s_minute : " + s_minute);
+
+								// end time 추출
+								let e_hour = `${value.end_time}`;
+								e_hour = e_hour.substr(0, 2);
+								let e_minute = `${value.end_time}`;
+								e_minute = e_minute.substr(3, 2);
+								console.log("e_hour : " + e_hour + " e_minute : " + e_minute);
+
+								// 색깔 칠하기
+								let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16); // 랜덤 색상 생성
+
+								for (let i = parseInt(s_hour); i <= parseInt(e_hour); i++) {
+									let temp_i = String(i); // i 값을 문자로 변환
+									if (temp_i.length == 1) temp_i = "0" + temp_i; // i가 한자리면 앞에 0추가
+
+									if (i == parseInt(s_hour) && s_minute == "30") { // i가 시작시간의 시간과 같으면서 시작시간의 분이 30이면,
+										$('#' + cnt + temp_i + '30').css("background-color", colorCode);
+									} else {
+										if (i == parseInt(e_hour) && e_minute == "30") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 30이면,
+											$('#' + cnt + temp_i + '00').css("background-color", colorCode);
+										} else if (i == parseInt(e_hour) && e_minute == "00") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 00이면,
+											let temp_ehour = parseInt(e_hour);
+											temp_ehour--;
+											e_hour = String(temp_ehour);
+											if (e_hour.length == 1) {
+												e_hour = "0" + e_hour;
+											}
+
+											$('#' + cnt + temp_ehour + '30').css("background-color", colorCode);
+										} else {
+											$('#' + cnt + temp_i + '00').css("background-color", colorCode);
+											$('#' + cnt + temp_i + '30').css("background-color", colorCode);
+										}
+
+									}
+								}
+							}
+						}
+					}
+
+
+
+				}
 			} else if (pageVal === 'category') {
-				$("#checkedSub").find("option").remove();//기존 옵션 제거하고 새로운  loc에 따른 장소 불러올 것
+				$("#checkedSub").find("option").remove();//기존 옵션 제거하고 선택된 메인카테고리에 따른 서브카테고리불러올 것
 				for (var value of json) {
 					$('#checkedSub').append($("<option></option>").attr("value", 2).text(`${value}`));
+				}
+			}  else if (pageVal === 'categoryDialog') {
+				$("#checkedSubDialog").find("option").remove();//기존 옵션 제거하고 선택된 메인카테고리에 따른 서브카테고리불러올 것
+				for (var value of json) {
+					$('#checkedSubDialog').append($("<option></option>").attr("value", 2).text(`${value}`));
 				}
 			} else if (pageVal === 'scheduleList') {
 				$("#scheduleTableBody").empty();//테이블 내용 비우기
@@ -254,6 +344,15 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	//////////달력 - weekly	
 	function buildWeek(week) {
 		today.setDate(today.getDate() + week * 7);
+		
+		//rightSection칸에 week소스 채우기
+		var daySet = makeElementWeek(0);
+		alert(daySet);
+		weeklySetting(daySet);
+		alert(`/api/schedules/${$("#categoryNo").text()}?year=${firstDate.getFullYear()}&month=${month}&week=1&fwd=${firstWeekDay}&lwd=${lastWeekDay}&t_month=${temp_month}`);
+		fetchData(`/api/schedules/${$("#categoryNo").text()}?year=${firstDate.getFullYear()}&month=${month}&week=1&fwd=${firstWeekDay}&lwd=${lastWeekDay}&t_month=${temp_month}`,'weekly');
+		/*기존 WEEK
+		today.setDate(today.getDate() + week * 7);
 		let title = "&nbsp;" + today.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;" + (today.getMonth() + 1) + "월&nbsp;(주)";
 
 		for (let i = 0; i < 7; i++) {
@@ -268,9 +367,43 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		//rightSection칸에 week소스 채우기
 		var daySet = makeElementWeek(0);
 		weeklySetting(daySet);
+		*/
 	}
 
 	function makeElementWeek(week) {
+		var daySet = [];
+		var weekDate = new Date(today);
+		weekDate.setDate(weekDate.getDate() + week * 7); //나타낼 주 날짜 읽어와서 저장하기 0, -1, +1
+		if (weekDate.getDay() == 0) {
+			weekDate.setDate(weekDate.getDate() - 6);
+		} else {
+			weekDate.setDate(weekDate.getDate() - (weekDate.getDay() - 1));
+		} //첫주 시작 월요일로 잡기
+		
+		let title = "&nbsp;" + weekDate.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;" + (weekDate.getMonth() + 1) + "월&nbsp;";
+		month = weekDate.getMonth() + 1;
+		
+		for (let cnt = 0; cnt < 7; cnt++) {//0~6
+			daySet[cnt] = `${weekDate.getDate()}`;
+			
+			if (weekDate.getDate() == 1 && daySet[0] != 1) {
+				title += " ~&nbsp;&nbsp;&nbsp;&nbsp; " + weekDate.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ (weekDate.getMonth() + 1) + "월";
+				temp_year = weekDate.getFullYear();
+				temp_month = weekDate.getMonth() + 1;
+			}
+			
+			weekDate.setDate(weekDate.getDate() + 1);//날짜 증가시키기
+		}
+		$(".current-year-month").html(title);
+		
+		// 해당 주 첫번째 날, 마지막 날 저장
+		firstWeekDay = daySet[0];
+		lastWeekDay = daySet[6];
+		
+		return daySet;
+		
+		/*기존 WEEK
 		var daySet = [];
 		var weekDate = new Date(today);
 		weekDate.setDate(weekDate.getDate() + week * 7);//나타낼 주 날짜 읽어와서 저장하기 0,-1,+1
@@ -284,7 +417,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			daySet[cnt] = `${weekDate.getDate()}`;
 			weekDate.setDate(weekDate.getDate() + 1);//날짜 증가시키기
 		}
-		return daySet;
+		return daySet;*/
 	}
 
 	//////////달력 - 공통함수

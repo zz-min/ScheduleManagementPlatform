@@ -37,6 +37,38 @@
 	margin: 3px;	
 }
 
+.timeLineItemValue{
+	height: 35px;
+	background-color: white;
+	display: flex;
+	align-items: center;
+	width: 150px;
+	justify-content: center;
+	border: 1px solid red;
+	margin-top: 5px;
+}
+.timeLineItemValueFirst{
+	height: 35px;
+	background-color: white;
+	display: flex;
+	align-items: center;
+	width: 150px;
+	justify-content: center;
+	border: 1px solid red;
+	margin-top: 5px;
+}
+
+.timeLineItem{
+	height: calc(100%/20);
+	background-color: aliceblue;
+	display: flex;
+	align-items: center;
+	width: 92%;
+	min-width:125px;
+	justify-content: center;
+	margin: 3px;	
+}
+
 .weekContainer{
 	flex-basis: 87.5%;
 	background-color: pink;

@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +29,37 @@ public class ApiScheduleController implements ControllerInterface {
 		String id=request.getParameter("id");
 		
 		String categoryNo=temp[3];
+		
+		// week 처리용 해당 주차 처음 날과 마지막 날
+		String firstweekday = request.getParameter("fwd");
+		String lastweekday = request.getParameter("lwd");
+
+		// month, firstweekday, lastweekday가 한자리라면 앞에 0을 추가함
+		if (month != null && firstweekday != null && lastweekday != null) {
+			if (month.length() == 1) {
+				month = "0" + month;
+			}
+			if (firstweekday.length() == 1) {
+				firstweekday = "0" + firstweekday;
+			}
+			if (lastweekday.length() == 1) {
+				lastweekday = "0" + lastweekday;
+			}
+		}
+		
+		// firstweekday, lastweekday를 정수로 변환후 서로 비교하여 lastweekday보다 firstweekday가 더 크면
+		// db검색할 때 마지막 월을 1증가시켜 검색!
+		int temp_fwd, temp_lwd, t_month;
+		String lastmonth = month;
+		if (firstweekday != null && lastweekday != null) {
+			temp_fwd = Integer.parseInt(firstweekday);
+			temp_lwd = Integer.parseInt(lastweekday);
+
+			if (temp_lwd < temp_fwd) {
+				t_month = Integer.parseInt(month) + 1;
+				lastmonth = Integer.toString(t_month);
+			}
+		}
 		
 		// GET
 		// /api/schedules - schedules 전체목록반환
@@ -95,7 +125,16 @@ public class ApiScheduleController implements ControllerInterface {
 								e.printStackTrace();
 							}
 						} else {// weekly DATA 구하기
-
+							System.out.println("Weekly Data 실행!");
+							String sql = "rsv_date BETWEEN date('" + year + month + firstweekday + "')" + 
+									" AND date('" + year + lastmonth + lastweekday + "')";
+							System.out.println("sql문출력 >>"+sql);
+							List<AllViewEntity> rsvAllList = smpService.getScheduleList(sql, categoryNo);
+							try {
+								returnMassage = mapper.writeValueAsString(rsvAllList);
+							} catch (JsonProcessingException e) {
+								e.printStackTrace();
+							}
 						}
 					}
 				}
