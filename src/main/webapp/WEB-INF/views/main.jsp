@@ -22,6 +22,12 @@
 <script src="/js/main.js"></script>
 </head>
 <body>
+	
+	
+	
+	
+	
+
 	<div class="iconContainer">
 		<div id="icon">
 			<i class="fas fa-user-cog fa-3x" id="admin-icon"></i><!-- admin페이지로 이동 -->
