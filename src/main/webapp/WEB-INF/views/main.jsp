@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,9 +45,18 @@
             <li><a href="">FAQ</a></li>
         </ul>
         
-        <ul class="navbar_icons">
-            <li><i class="fas fa-user-circle"></i>&nbsp&nbsp&nbspLogin</li>
-        </ul>
+        <div class="navbar_icons">
+        	<div class="loginBtn">
+            	<i class="fas fa-user-circle"></i>
+            	<span>Login</span>
+   <%--           	<c:if test="${userName eq NULL }"><span>Login</span></c:if>
+    	       	<c:if test="${userName ne NULL }">
+            		<span>${userName}</span><br>
+            		<span id="logoutBtn" class="loginBtn_content">logout</span>
+            		<span id="mypageBtn" class="loginBtn_content">mypage</span>
+            	</c:if>     --%>        	
+            </div>
+        </div>
         
         <div class="navbar_toogleBtn"><!-- 메뉴버튼 -->
             <i class="fas fa-bars"></i>

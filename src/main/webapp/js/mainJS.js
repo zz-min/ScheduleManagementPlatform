@@ -43,7 +43,7 @@ $(function() {
 	function userLoginFun() {
 		const userId = btoa($("#userId").val());//base64 인코딩
 		const userPwd = btoa($("#userPwd").val());
-		var url = `/api/users/login?id=${userId}&pwd=${userPwd}`
+		var url = `/api/users/login?id=${userId}&pwd=${userPwd}`;// 로그인 요청보내기
 		loginFetch(url, userId, userPwd);
 	}
 	
@@ -55,9 +55,18 @@ $(function() {
 			.then(res => {
 				if (res == 'true') {
 					console.log("로그인 성공");
-					var index = $("#checkedCategory").text().substr(8);
-					window.location.assign("/main?category=" + index+"&id="+$("#userId").val());
+					$(".loginBtn").children().last().text(getCookie("userName"));
+					userLoginDialog.dialog("close");
+					
+					//setCookie("Ck_01","on","1") //변수, 변수값, 저장기간
+					
+					//var index = $("#checkedCategory").text().substr(8);
+					//window.location.assign("/main?category=" + index+"&id="+$("#userId").val());
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});
 	}
-}
+	$(".navbar_icons").children().on("click", function() {
+		userLoginDialog.dialog("open");
+	});
+	
+});

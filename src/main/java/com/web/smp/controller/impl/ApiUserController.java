@@ -1,7 +1,9 @@
 package com.web.smp.controller.impl;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sound.midi.ControllerEventListener;
 import javax.sound.midi.ShortMessage;
 
@@ -54,6 +56,27 @@ public class ApiUserController implements ControllerInterface {
 				String pwd=new String(base64.decode( request.getParameter("pwd").getBytes()));
 				System.out.println(id+"와"+pwd+"를 유효성검사중");
 				boolean loginCheck = smpService.loginAvailability(id,pwd);//로그인 유효성 검사
+				if (loginCheck) {/* login 성공일때 쿠키생성 */
+					String userName=smpService.getUserName(id);
+					
+					Cookie cookieId=new Cookie("userId",id);
+					cookieId.setPath("/");//쿠키를 모든 위치에서 사용가능
+					cookieId.setMaxAge(30);//60s
+					Cookie cookieName=new Cookie("userName",userName);
+					cookieName.setPath("/");//쿠키를 모든 위치에서 사용가능
+					cookieName.setMaxAge(30);//60s
+					Cookie cookieLogin=new Cookie("login","true");
+					cookieLogin.setPath("/");//쿠키를 모든 위치에서 사용가능
+					cookieLogin.setMaxAge(30);//60s
+					response.addCookie(cookieId);
+					response.addCookie(cookieName);
+					response.addCookie(cookieLogin);
+					
+					HttpSession session=request.getSession(true);//가져올 세션이 없다면 새로 생성
+					session.setAttribute("userId", id);
+					session.setAttribute("userName", userName);
+				}
+				
 				returnMassage=loginCheck?"true":"false";
 			} else {// temp[3] = 특정 USER ID
 				if (method.equals("GET")) {// 특정 user 정보가져오기
