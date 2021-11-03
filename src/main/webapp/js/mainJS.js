@@ -1,39 +1,16 @@
-/**
- * 
- */
+const toggleBtn=document.querySelector('.navbar_toogleBtn');
+const menu=document.querySelector('.navbar_menu');
+const icons=document.querySelector('.navbar_icons');
+
+toggleBtn.addEventListener('click',()=>{
+    menu.classList.toggle('active');
+    icons.classList.toggle('active');
+});
+
 $(function() {
-	var script = document.createElement('script');
-	script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
-	script.type = 'text/javascript';
-	
-	$(".menuBtn").on("click", function() {
-		$("#checkedCategory").text($(this).attr("id"));
-		//로그인 여부 확인
-	});
-	
-	$(".navbar_toogleBtn").on("click", function() {
-		alert("navbar_toogleBtn!!");
-	});
-
-	$(".navbar_icons").children().on("click", function() {
-		//alert("navbar_icons클릭 >> LOGIN");
-		userLoginDialog.dialog("open");
-	});
-	
-	var userLoginDialog, userLoginForm;
-	var adminLoginDialog, adminLoginForm;
-
+	var userLoginDialog;
 	var userLoginField = $([]).add("#userId").add("#userPwd");
-	var adminLoginField = $([]).add("#adminId").add("#adminPwd");
-
-	function checkLength(o, min, max) {
-		if (o.val().length > max || o.val().length < min) {
-			return false;
-		} else {
-			o.removeClass("ui-state-error"); //에러 없애기
-			return true;
-		}
-	}
+	
 	userLoginDialog = $("#user-login-dialog-form").dialog({
 		autoOpen: false,//페이지 로드시 다이얼로그가 자동으로 열리는 것 방지
 		height: 250,
@@ -52,19 +29,17 @@ $(function() {
 			userLoginField.removeClass("ui-state-error");//에러 없애기
 		}
 	});
-	function userLoginCheckLength() {
-		var valid = true;
-		userLoginField.removeClass("ui-state-error");
-
-		valid = checkLength(userLoginField, 5, 15);
-		if (valid) {//true - 로그인 요청
-			userLoginFun();
-		} else {//false
+	
+	function userLoginCheckLength() {//로그인 요청시 들어오는 함수
+		userLoginField.removeClass("ui-state-error"); //에러 없애기
+		if (userLoginField.val().length > 15 || userLoginField.val().length < 5) {
+			//false
 			userLoginField.addClass("ui-state-error");
 			alert("아이디와 비밀번호를 다시 확인해 주세요.");
+		} else {//true - 로그인 요청
+			userLoginFun();
 		}
 	}
-
 	function userLoginFun() {
 		const userId = btoa($("#userId").val());//base64 인코딩
 		const userPwd = btoa($("#userPwd").val());
@@ -85,6 +60,4 @@ $(function() {
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});
 	}
-
-	
-});
+}
