@@ -42,19 +42,19 @@
             <li id="category1" class="menuBtn">Studio</li>
             <li id="category2" class="menuBtn">Rental</li>
             <li id="category3" class="menuBtn">Consulting</li>
-            <li><a href="">FAQ</a></li>
+            <li id="faqTest">FAQ</li>
         </ul>
         
         <div class="navbar_icons">
         	<div class="loginBtn">
             	<i class="fas fa-user-circle"></i>
-            	<span>Login</span>
-   <%--           	<c:if test="${userName eq NULL }"><span>Login</span></c:if>
+            	<!-- <span>Login</span> -->
+             	<c:if test="${userName eq NULL }"><span>Login</span></c:if>
     	       	<c:if test="${userName ne NULL }">
             		<span>${userName}</span><br>
             		<span id="logoutBtn" class="loginBtn_content">logout</span>
             		<span id="mypageBtn" class="loginBtn_content">mypage</span>
-            	</c:if>     --%>        	
+            	</c:if>            	
             </div>
         </div>
         
@@ -72,13 +72,42 @@
         </svg>
     </div>
     <p id="checkedCategory"></p><!-- category1값이 text로 저장 - hidden  -->
-    
-    <div id="mainContatiner">
-        <div id="imgContatiner">
-             <a href="#"><img id ="img" src="/img/image.png"></a>
-        </div>
-        <div id="imgContatiner2">
-            <!--  <a href="#"><img id ="img" src="img.jpg"></a> -->
+
+	<%
+	List list = new ArrayList();
+	list.add("월");
+	list.add("화");
+	list.add("수");
+	list.add("목");
+	list.add("금");
+	list.add("토");
+	list.add("일");
+	pageContext.setAttribute("daySet", list);
+
+	String[] days = { "월", "화", "수", "목", "금", "토", "일" };
+	pageContext.setAttribute("days", days);
+	%>
+
+	<div id="mainContatiner">
+    	<div class="home_form">
+	        <div id="imgContatiner">
+	             <img id ="img" src="/img/image.png">
+	        </div>
+	        <div id="imgContatiner2">
+	            <!--  <a href="#"><img id ="img" src="img.jpg"></a> -->
+	         </div>
+         </div>
+         <div class="studio_form">
+         
+		</div>
+         <div class="rental_form">
+         
+         </div>
+         <div class="consulting_form">
+         
+         </div>
+         <div class="fnq_form">
+         
          </div>
     </div>
     

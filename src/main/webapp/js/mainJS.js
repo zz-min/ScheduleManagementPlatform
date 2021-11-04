@@ -1,11 +1,31 @@
 const toggleBtn=document.querySelector('.navbar_toogleBtn');
 const menu=document.querySelector('.navbar_menu');
+const menuChild=menu.childNodes;
 const icons=document.querySelector('.navbar_icons');
+const faqTest=document.querySelector('#faqTest');
+const mainContatiner=document.querySelector('#mainContatiner');
 
 toggleBtn.addEventListener('click',()=>{
     menu.classList.toggle('active');
     icons.classList.toggle('active');
 });
+faqTest.addEventListener('click', () => {
+		deleteMain();
+});
+menuChild[1].addEventListener('click', () => {
+		alert("menu1");
+});
+menuChild[4].addEventListener('click', () => {
+		alert("menu4");
+});
+
+function deleteMain(){
+	console.log(mainContatiner.childElementCount);
+	for(var i=1;i<=mainContatiner.childElementCount;i++){
+		var temp=mainContatiner.childNodes;
+		temp[i].style.display = "none";
+	}
+}
 
 $(function() {
 	var userLoginDialog;
@@ -55,16 +75,30 @@ $(function() {
 			.then(res => {
 				if (res == 'true') {
 					console.log("로그인 성공");
+					console.log(document.cookie);
+					console.log(getCookie("userName"));
 					$(".loginBtn").children().last().text(getCookie("userName"));
-					userLoginDialog.dialog("close");
+					$(".loginBtn").children().last().append('<br><span id="logoutBtn" class="loginBtn_content">logout</span><span id="mypageBtn" class="loginBtn_content">mypage</span>');
 					
-					//setCookie("Ck_01","on","1") //변수, 변수값, 저장기간
+					userLoginDialog.dialog("close");
 					
 					//var index = $("#checkedCategory").text().substr(8);
 					//window.location.assign("/main?category=" + index+"&id="+$("#userId").val());
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});
 	}
+	function getCookie(cookie_name) {
+		//document.cookie => userId=600548; userName=홍길동; login=true
+		var x, y; 
+		var val = document.cookie.split(';');
+		for (var i = 0; i < val.length; i++) {
+			x = val[i].substr(0, val[i].indexOf('='));
+			y = val[i].substr(val[i].indexOf('=') + 1);
+			x = x.replace(/^\s+|\s+$/g, '');// 앞과 뒤의 공백 제거하기 
+			if (x == cookie_name) {return unescape(y); }
+			// unescape로 디코딩 후 값 리턴 
+		}
+	} 
 	$(".navbar_icons").children().on("click", function() {
 		userLoginDialog.dialog("open");
 	});
