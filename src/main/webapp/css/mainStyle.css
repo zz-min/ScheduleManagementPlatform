@@ -62,20 +62,27 @@ a{
 }
 .navbar_icons{
     flex-basis: 25%;
-    list-style: none;
-    font-size: 25px;
     color: black;
     display: flex;
-    padding-left: 0; 
-    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+.loginSection{
+	font-size: 25px;
 }
 
-.loginBtn i{
+.loginSection i{
     padding-right: 10px;
 }
-.loginBtn_content{
-	font-size: 10px;
+.logoutSection{
+	font-size: 15px;
+	display: none;
 }
+.logoutSection sapn :hover {
+    background-color: var(--color-green1);
+    border-radius: 6px;
+}
+
 .navbar_toogleBtn{
     display: none;
     position: absolute;
@@ -113,49 +120,6 @@ a{
     .navbar_icons.active{
         display: flex;
     }
-}
-/* 아래쪽 UI */
-.custom-shape-divider-bottom-1635871467 {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-    transform: rotate(180deg);
-}
-
-.custom-shape-divider-bottom-1635871467 svg {
-    position: relative;
-    display: block;
-    width: calc(106% + 1.3px);
-    height: 85px;
-    transform: rotateY(180deg);
-}
-
-.custom-shape-divider-bottom-1635871467 .shape-fill {
-    fill: var(--color-point1);
-}
-/* 위쪽 ui */
-.custom-shape-divider-top-1635871786 {
-   /*  position: absolute; */
-    top: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    line-height: 0;
-}
-
-.custom-shape-divider-top-1635871786 svg {
-    position: relative;
-    display: block;
-    width: calc(103% + 1.3px);
-    height: 60px;
-    transform: rotateY(180deg);
-}
-
-.custom-shape-divider-top-1635871786 .shape-fill {
-    fill: var(--color-point1);
 }
 
 /*self*/

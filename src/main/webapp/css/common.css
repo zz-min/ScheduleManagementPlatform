@@ -40,3 +40,48 @@ h1, h2, h3, h4, h5, h6, div, p, dl, dt, dd, ol, form, fieldset,
 img {
 	vertical-align: top;
 }
+
+/* header */
+.custom-shape-divider-top-1635871786 {
+   /*  position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1635871786 svg {
+    position: relative;
+    display: block;
+    width: calc(103% + 1.3px);
+    height: 60px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-top-1635871786 .shape-fill {
+    fill: var(--color-point1);
+}
+
+/* footer */
+.custom-shape-divider-bottom-1635871467 {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1635871467 svg {
+    position: relative;
+    display: block;
+    width: calc(106% + 1.3px);
+    height: 85px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1635871467 .shape-fill {
+    fill: var(--color-point1);
+}

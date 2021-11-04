@@ -9,7 +9,7 @@ toggleBtn.addEventListener('click',()=>{
     menu.classList.toggle('active');
     icons.classList.toggle('active');
 });
-faqTest.addEventListener('click', () => {
+/*faqTest.addEventListener('click', () => {
 		deleteMain();
 });
 menuChild[1].addEventListener('click', () => {
@@ -25,7 +25,7 @@ function deleteMain(){
 		var temp=mainContatiner.childNodes;
 		temp[i].style.display = "none";
 	}
-}
+}*/
 
 $(function() {
 	var userLoginDialog;
@@ -53,18 +53,16 @@ $(function() {
 	function userLoginCheckLength() {//로그인 요청시 들어오는 함수
 		userLoginField.removeClass("ui-state-error"); //에러 없애기
 		if (userLoginField.val().length > 15 || userLoginField.val().length < 5) {
-			//false
+			//false - ID,PWD 재요청
 			userLoginField.addClass("ui-state-error");
 			alert("아이디와 비밀번호를 다시 확인해 주세요.");
-		} else {//true - 로그인 요청
-			userLoginFun();
+		} else {
+			//true - 로그인 유효성 검사
+			const userId = btoa($("#userId").val());//base64 인코딩
+			const userPwd = btoa($("#userPwd").val());
+			var url = `/api/users/login?id=${userId}&pwd=${userPwd}`;// 로그인 요청보내기
+			loginFetch(url, userId, userPwd);
 		}
-	}
-	function userLoginFun() {
-		const userId = btoa($("#userId").val());//base64 인코딩
-		const userPwd = btoa($("#userPwd").val());
-		var url = `/api/users/login?id=${userId}&pwd=${userPwd}`;// 로그인 요청보내기
-		loginFetch(url, userId, userPwd);
 	}
 	
 	function loginFetch(url, id, pwd) {//GET메소드
@@ -75,10 +73,9 @@ $(function() {
 			.then(res => {
 				if (res == 'true') {
 					console.log("로그인 성공");
-					console.log(document.cookie);
 					console.log(getCookie("userName"));
-					$(".loginBtn").children().last().text(getCookie("userName"));
-					$(".loginBtn").children().last().append('<br><span id="logoutBtn" class="loginBtn_content">logout</span><span id="mypageBtn" class="loginBtn_content">mypage</span>');
+					$(".loginSection").children(":eq(1)").text(getCookie("userName"));
+					$(".logoutSection").show();
 					
 					userLoginDialog.dialog("close");
 					
