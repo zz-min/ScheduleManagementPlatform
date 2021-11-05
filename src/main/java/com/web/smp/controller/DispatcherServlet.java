@@ -76,6 +76,7 @@ public class DispatcherServlet extends HttpServlet {
 
 		} else {//페이지 이동
 			if (handler != null) {
+				//session이 있거나 cookie가 존재하면 넘어가기 -> 아니라면 알람띄우고 메인페이지
 				viewName = handler.handleRequest(request, response, smpService);
 			}
 			// step #3. output processing results

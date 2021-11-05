@@ -20,9 +20,9 @@ public class HandlerMapping {
 
 		handlerMapper.put("/index", new IndexController());
 		
-		handlerMapper.put("/studio", new StudioController());
-		
-		handlerMapper.put("/main", new MainController());
+		handlerMapper.put("/main/studio", new MainController());
+		handlerMapper.put("/main/rental", new MainController());
+		handlerMapper.put("/main/consulting", new MainController());
 		
 		handlerMapper.put("/api/users", new ApiUserController());
 		handlerMapper.put("/api/schedules", new ApiScheduleController());

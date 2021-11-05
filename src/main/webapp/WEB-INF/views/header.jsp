@@ -25,10 +25,12 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
 	<script src="/js/mainJS.js" defer></script>
+	<script src="/js/calendar.js"></script>
 	
 	<link href="/css/common.css" rel="stylesheet" type="text/css">
-	<link href="/css/mainStyle.css?dd" rel="stylesheet" type="text/css">
+	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css">
 	<link href="/css/dialog.css" rel="stylesheet" type="text/css">
+	<link href="/css/calendarStyle.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -49,15 +51,16 @@
 	<nav class="navbar">
     
         <div class="navbar_logo">
-            <i class="fas fa-robot"></i>
-            <span>CTR System</span><!-- //Campus Total Reservation System -->
+        	<a href="/index">
+            <i class="fas fa-robot"></i><span>CTR System</span>
+            </a>
         </div>
         
         <ul class="navbar_menu">
-            <li id="category1" class="menuBtn"><a href="/studio">Studio</a></li>
-            <li id="category2" class="menuBtn">Rental</li>
-            <li id="category3" class="menuBtn">Consulting</li>
-            <li id="faqTest">FAQ</li>
+            <li id="category1" class="menuBtn"><a href="/main/studio">Studio</a></li>
+            <li id="category2" class="menuBtn"><a href="/main/rental">Rental</a></li>
+            <li id="category3" class="menuBtn"><a href="/main/consulting">Consulting</a></li>
+            <li id="faqTest"><a href="/studio">FAQ</a></li>
         </ul>
         
         <div class="navbar_icons">
@@ -90,4 +93,3 @@
 				class="shape-fill"></path>
         </svg>
 	</div>
-	<p id="checkedCategory"></p><!-- category1값이 text로 저장 - hidden  -->
