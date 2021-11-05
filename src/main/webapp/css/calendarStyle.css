@@ -15,6 +15,25 @@
 	box-sizing: border-box;
 	text-align: center;
 }
+.calendarHeaderContainer{
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+.calendarHeaderBtn{
+	display:inline-block;
+	margin:5px;
+	font-size: 18px;
+	height: 25px;
+	width:80px;
+	font-family:unset;
+	background-color: lightgray;
+	border-radius: 4px;
+}
+.calendarHeaderBtn:hover{
+	background-color: gray;
+	cursor: pointer;
+}
+
 .contentContainer{
 	margin-top: 40px;
 	margin-bottom: 40px;
@@ -38,8 +57,16 @@
 	-webkit-appearance: none;
 }
 .checkedContentSelect::-ms-expand {  display: none;}
-#contentBtn, #allContentBtn{
-	margin-top:5px;
+
+
+.contentBtn{
+	margin:5px;
+	font-size: 12px;
+	height: 30px;
+	width:120px;
+	background-color: gray;
+	border-radius: 4px;
+	padding: 5px;
 }
 /* RIGHT */
 .rightSection { 
@@ -49,6 +76,7 @@
 	display: flex;
 	border: 3px solid gray;
 	border-radius: 8px;
+	margin: 0.2%;
 }
 
 /* == RIGHT(monthly) == */
@@ -56,7 +84,7 @@
 	height: 100%; /* 800px */
 	width:100%;
 	box-sizing: border-box;
-	margin: 0.5%;
+	margin: 0.2%;
 	display: flex;
 	flex-direction: column;
 }

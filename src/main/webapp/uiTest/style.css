@@ -175,9 +175,9 @@ a{
 #imgContatiner2{
     background-color: var(--color-point1);
     border-radius: 20px;
-    width: 90%;
-    height: 12%;
-    min-width: 1255px;
+    width: 80%;
+    height: 50%;
+    font-size: 20px;
     max-width: 1290px;
 }
 #img{

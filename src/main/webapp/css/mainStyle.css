@@ -34,7 +34,6 @@ a{
     align-items: center; 
     background-color: var(--color-point1);
     padding:8px 12px;
-    width: 100%;
 }
 .navbar_logo{
     flex-basis: 25%;

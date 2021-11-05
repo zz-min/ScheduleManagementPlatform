@@ -19,6 +19,7 @@ public class HandlerMapping {
 		handlerMapper = new HashMap<String, ControllerInterface>();
 
 		handlerMapper.put("/index", new IndexController());
+		handlerMapper.put("/main", new IndexController());
 		
 		handlerMapper.put("/main/studio", new MainController());
 		handlerMapper.put("/main/rental", new MainController());

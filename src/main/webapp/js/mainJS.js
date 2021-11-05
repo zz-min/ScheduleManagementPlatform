@@ -9,23 +9,6 @@ toggleBtn.addEventListener('click',()=>{
     menu.classList.toggle('active');
     icons.classList.toggle('active');
 });
-/*faqTest.addEventListener('click', () => {
-		deleteMain();
-});
-menuChild[1].addEventListener('click', () => {
-		alert("menu1");
-});
-menuChild[4].addEventListener('click', () => {
-		alert("menu4");
-});
-
-function deleteMain(){
-	console.log(mainContatiner.childElementCount);
-	for(var i=1;i<=mainContatiner.childElementCount;i++){
-		var temp=mainContatiner.childNodes;
-		temp[i].style.display = "none";
-	}
-}*/
 
 $(function() {
 	var userLoginDialog;
@@ -92,8 +75,7 @@ $(function() {
 			x = val[i].substr(0, val[i].indexOf('='));
 			y = val[i].substr(val[i].indexOf('=') + 1);
 			x = x.replace(/^\s+|\s+$/g, '');// 앞과 뒤의 공백 제거하기 
-			if (x == cookie_name) {return unescape(y); }
-			// unescape로 디코딩 후 값 리턴 
+			if (x == cookie_name) {return unescape(y); }// unescape로 디코딩 후 값 리턴 
 		}
 	} 
 	$(".navbar_icons").children().on("click", function() {

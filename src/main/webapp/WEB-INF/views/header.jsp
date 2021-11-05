@@ -24,9 +24,6 @@
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
-	<script src="/js/mainJS.js" defer></script>
-	<script src="/js/calendar.js"></script>
-	
 	<link href="/css/common.css" rel="stylesheet" type="text/css">
 	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css">
 	<link href="/css/dialog.css" rel="stylesheet" type="text/css">

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<script src="/js/mainJS.js" defer></script>
 <%@include file ="/WEB-INF/views/header.jsp" %>
 
 	<div id="mainContatiner">

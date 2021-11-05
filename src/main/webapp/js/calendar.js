@@ -52,6 +52,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 		return valid;
 	});
+	
 	$("#prev").click(function() {
 		if ($(".mwBtn").val() == 'weekly') {
 			clickMonth(-1);
@@ -312,6 +313,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 
 		lastDay = new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0).getDate();//9/30 3(목)
 		prevLastDay = new Date(firstDate.getFullYear(), firstDate.getMonth(), 0).getDate();//8/31 1(화)
+		
 		var daySet = [];
 		var cnt = 0;
 		for (let i = 0; i < 6; i++) {//1~6주차를 위해 6번 반복        

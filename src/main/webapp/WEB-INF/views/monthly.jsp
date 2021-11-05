@@ -1,10 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file ="/WEB-INF/views/header.jsp" %>
+<script src="/js/calendarJS.js" defer></script>
 
 <div class="sectionContainer">
 	<!------------- LEFT --------------->
 	<div class="leftSection">
+		<div class="calendarHeaderContainer">
+			<h1 class="currentCalendarHeader"> </h1>
+			<div id="prev"  class="calendarHeaderBtn" > < </div>
+			<div id="todayBtn"  class="calendarHeaderBtn" > today </div>
+			<div id="next" class="calendarHeaderBtn"> > </div>
+		</div>
 		<div class="contentContainer">
 			<h2>카테고리 선택</h2> 
 			<form class="contentForm">
@@ -18,8 +25,15 @@
 					<option value="none">= 매인을 먼저 선택해주세요 =&nbsp&nbsp</option>
 				</select>
 			</form>
-			<button id="contentBtn">선택 카테고리 보기</button>
-			<button id="allContentBtn">모든 카테고리 보기</button>
+			<input type="button" value="선택 카테고리 보기" id="contentBtn" class="contentBtn" />
+			<input type="button" value="모든 카테고리 보기" id="allContentBtn" class="contentBtn" />
+		</div>
+		<div class="btnContainer">
+			<input type="button" value="weekly" id="weeklyBtn" class="contentBtn" />
+			<input type="button" value="My Reservation" id="rsvBtn" class="contentBtn" />
+		</div>
+		<div class="testArea">
+		
 		</div>
 	</div>
 	<!--------------- RIGHT  --------------->
