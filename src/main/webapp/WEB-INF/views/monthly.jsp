@@ -8,24 +8,24 @@
 	<div class="leftSection">
 		<div class="calendarHeaderContainer">
 			<h1 class="currentCalendarHeader"> </h1>
-			<div id="prev"  class="calendarHeaderBtn" > < </div>
+			<div id="prevBtn"  class="calendarHeaderBtn" > < </div>
 			<div id="todayBtn"  class="calendarHeaderBtn" > today </div>
-			<div id="next" class="calendarHeaderBtn"> > </div>
+			<div id="nextBtn" class="calendarHeaderBtn"> > </div>
 		</div>
 		<div class="contentContainer">
 			<h2>카테고리 선택</h2> 
 			<form class="contentForm">
-				<select name="checkedMain" id="checkedMain" class="checkedContentSelect">
+				<select name="checkedMain" id="checkedMainCategory" class="checkedContentSelect">
 					<option value="none">= 매인 카테고리 =&nbsp&nbsp</option>
 					<c:forEach var="i" begin="0" end="${fn:length(mainContentList)-1}">
 						<option value="${mainContentList[i]}">${mainContentList[i]}</option>
 					</c:forEach>
 				</select> 
-				<select name="checkedSub" id="checkedSub" class="checkedContentSelect">
+				<select name="checkedSub" id="checkedSubCategory" class="checkedContentSelect">
 					<option value="none">= 매인을 먼저 선택해주세요 =&nbsp&nbsp</option>
 				</select>
 			</form>
-			<input type="button" value="선택 카테고리 보기" id="contentBtn" class="contentBtn" />
+			<input type="button" value="선택 카테고리 보기" id="checkedContentBtn" class="contentBtn" />
 			<input type="button" value="모든 카테고리 보기" id="allContentBtn" class="contentBtn" />
 		</div>
 		<div class="btnContainer">

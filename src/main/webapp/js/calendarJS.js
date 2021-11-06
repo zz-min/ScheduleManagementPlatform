@@ -5,18 +5,10 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	$(".weeklyCalendar").hide();
 	$(".userScheduleContainer").hide();
 	
-	$(".calendar_day").on("click",function(){
-		rsvDialog.dialog("open");
-		$("#rsv-dialog-date").text(`${today.getFullYear()}년 ${String(today.getMonth()+1).padStart(2,'0')}월 ${$(this).children().first().text()}일`);
-		$("#dialog-rsvList").html($(this).children().last().html());
-		
-		//today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text()
-	});
-	
 	var path = window.location.href;
 	var path_ = path.split('/').reverse()[0];
 	var categoryName=['studio','rental','consulting'];
-	var categoryNo=categoryName.indexOf(path_)+1;
+	var categoryNo=categoryName.indexOf(path_)+1; // 사용시 ${categoryNo}이렇게 사용할 것
 	let today = new Date(); // 현재 오늘 날짜 (변함 x , 고정값)
 	
 	let currentDate=today;//페이지에서의 날짜 - CD (2021-11-6)
@@ -119,6 +111,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	async function fetchData(url, pageVal){
 		const response = await fetch(url);
 		const json = await response.json();
+		console.log(pageVal);
 		if (json != null) {
 			if (pageVal === 'monthly') {
 				for (var value of json) {
@@ -140,10 +133,62 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 				}
 			} else if (pageVal === 'weekly'){
 				$(".testArea").text("week");
-			}
+			}else if (pageVal === 'category') {
+				$("#checkedSubCategory").find("option").remove();//기존 옵션 제거하고 선택된 메인카테고리에 따른 서브카테고리불러올 것
+				for (var value of json) {
+					$('#checkedSubCategory').append($("<option></option>").attr("value", 2).text(`${value}`));
+				}
+			}  else if (pageVal === 'categoryDialog') {
+				$("#checkedSubDialog").find("option").remove();//기존 옵션 제거하고 선택된 메인카테고리에 따른 서브카테고리불러올 것
+				for (var value of json) {
+					$('#checkedSubDialog').append($("<option></option>").attr("value", 2).text(`${value}`));
+				}
+			} else if (pageVal === 'scheduleList'){
+				
+			} 
+			
 		}
 	}
-	/* RSV dialog */
+	
+	/************************LEFT*************************/
+	$("#checkedMainCategory").change(function() {//메인 카테고리에 따른 서브카테고리목록 반환
+		var v = $("#checkedMainCategory").val();
+		console.log("checkedMainCategory값 변동 함수 작동 >>" +`/api/contents/${categoryNo}?mainCategory=${encodeURI(encodeURIComponent(v))}`);
+		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
+		fetchData(`/api/contents/${categoryNo}?mainCategory=${encodeURI(encodeURIComponent(v))}`, 'category');
+	});
+	
+	$("#prevBtn").click(function() {
+	});
+	$("#nextBtn").click(function() {
+	});
+	$("#todayBtn").click(function() {
+	});
+	$("contentBtn").click(function() {
+	});
+	$("").click(function() {
+	});
+	$("").click(function() {
+	});
+	$("").click(function() {
+	});
+	
+	
+	/*************************RIGHT*************************/
+	$(".calendar_day").on("click",function(){
+		rsvDialog.dialog("open");
+		$("#rsv-dialog-date").text(`${today.getFullYear()}년 ${String(today.getMonth()+1).padStart(2,'0')}월 ${$(this).children().first().text()}일`);
+		$("#dialog-rsvList").html($(this).children().last().html());
+		
+		//today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text()
+	});
+	
+	/*************************RSV dialog *************************/
+	$("#checkedMainDialog").change(function() {
+		var v = $("#checkedMainDialog").val();
+		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
+		fetchData(`/api/contents/${categoryNo}?mainCategory=${encodeURI(encodeURIComponent(v))}`, 'categoryDialog');
+	});	
 	var rsvDialog, rsvForm;
 	rsvDialog = $("#rsv-dialog-form").dialog({
 		autoOpen : false,
@@ -172,6 +217,5 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 		return valid;
 	});
-
 
 });
