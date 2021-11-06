@@ -292,11 +292,13 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		firstDate = new Date(today.getFullYear(), today.getMonth(), 1, today.getDay());//2021.9.1.2(수)
 		lastDay = new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0).getDate();//9/30 3(목)
 		prevLastDay = new Date(firstDate.getFullYear(), firstDate.getMonth(), 0).getDate();//8/31 1(화)
+		//monthly header 변경
 		$(".current-year-month").html(`&nbsp;${firstDate.getFullYear()}년&nbsp;&nbsp;&nbsp;&nbsp;${firstDate.getMonth() + 1}월&nbsp;(월)`);
 
-		//rightSection칸에 month소스 채우기
+		//rightSection칸에 monthly소스 채우기
 		var daySet = makeElementMonth(firstDate);
 		monthlySetting(daySet);
+		
 		fetchData(`/api/schedules/${$("#categoryNo").text()}?year=${firstDate.getFullYear()}&month=${String(firstDate.getMonth()+1).padStart(2,'0')}&week=0`,'monthly');
 	}
 
@@ -345,7 +347,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 	//////////달력 - weekly	
 	function buildWeek(week) {
-		today.setDate(today.getDate() + week * 7);
+		today.setDate(today.getDate() + week * 7);  // 0 현재, -1 저번주, +1 다음주
 		
 		//rightSection칸에 week소스 채우기
 		var daySet = makeElementWeek(0);

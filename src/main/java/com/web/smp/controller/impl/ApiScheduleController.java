@@ -1,6 +1,9 @@
 package com.web.smp.controller.impl;
 
+import java.time.*;
+import java.time.temporal.*;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,42 +28,12 @@ public class ApiScheduleController implements ControllerInterface {
 		
 		String year=request.getParameter("year");
 		String month=request.getParameter("month");
-		String week=request.getParameter("week");
+		int week=Integer.parseInt(request.getParameter("week"));
 		String id=request.getParameter("id");
+		String category=request.getParameter("category");//subcategory
+		String categoryNo=temp[3];//maincategory
 		
-		String categoryNo=temp[3];
-		
-		// week 처리용 해당 주차 처음 날과 마지막 날
-		String firstweekday = request.getParameter("fwd");
-		String lastweekday = request.getParameter("lwd");
-
-		// month, firstweekday, lastweekday가 한자리라면 앞에 0을 추가함
-		if (month != null && firstweekday != null && lastweekday != null) {
-			if (month.length() == 1) {
-				month = "0" + month;
-			}
-			if (firstweekday.length() == 1) {
-				firstweekday = "0" + firstweekday;
-			}
-			if (lastweekday.length() == 1) {
-				lastweekday = "0" + lastweekday;
-			}
-		}
-		
-		// firstweekday, lastweekday를 정수로 변환후 서로 비교하여 lastweekday보다 firstweekday가 더 크면
-		// db검색할 때 마지막 월을 1증가시켜 검색!
-		int temp_fwd, temp_lwd, t_month;
-		String lastmonth = month;
-		if (firstweekday != null && lastweekday != null) {
-			temp_fwd = Integer.parseInt(firstweekday);
-			temp_lwd = Integer.parseInt(lastweekday);
-
-			if (temp_lwd < temp_fwd) {
-				t_month = Integer.parseInt(month) + 1;
-				lastmonth = Integer.toString(t_month);
-			}
-		}
-		
+		String sql=null;
 		// GET
 		// /api/schedules - schedules 전체목록반환
 		// /api/schedules/[카테고리번호] - 특정 category 에서만 사용되는 schedules 정보가져오기
@@ -101,7 +74,7 @@ public class ApiScheduleController implements ControllerInterface {
 				if(id!=null) { // id정보로 해당 schedules 내용 조회
 					if (method.equals("GET")) {//특정 id의 schedules 정보가져오기
 						System.out.println("특정 id의  schedules정보 조회 - ApiScheduleController - GET");
-						String sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+" AND user_id ="+id; 
+						sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+" AND user_id ="+id; 
 						
 						List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리중 특정 id만
 						try {
@@ -116,8 +89,14 @@ public class ApiScheduleController implements ControllerInterface {
 					}
 				}else { // 날짜 정보로 해당 schedules 내용 조회
 					if (method.equals("GET")) {
-						if (week.equals("0")) { // monthly DATA 구하기
-							String sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month;
+						if (week==0) { // monthly DATA 구하기
+							System.out.println("monthly DATA 구하기");
+							if(category.equals("all")) {
+								sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month;
+							}else {
+								sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+" AND sub_content = "+category;
+							}
+							System.out.println(sql);
 							List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리에 전체
 							try {
 								returnMassage = mapper.writeValueAsString(scheduleList);
@@ -125,10 +104,34 @@ public class ApiScheduleController implements ControllerInterface {
 								e.printStackTrace();
 							}
 						} else {// weekly DATA 구하기
-							System.out.println("Weekly Data 실행!");
-							String sql = "rsv_date BETWEEN date('" + year + month + firstweekday + "')" + 
-									" AND date('" + year + lastmonth + lastweekday + "')";
-							System.out.println("sql문출력 >>"+sql);
+							System.out.println("weekly DATA 구하기");
+							//year, month, week
+							
+							/*
+							 * 주차구하기 
+							 * 2021-1-1-금요일 : 1주차 기준
+							 * 2021-1-4-월요일 : 2주차 기준
+							 */
+						    LocalDate inputMonth = LocalDate.of(Integer.parseInt(year),Integer.parseInt(month),1); 
+						    WeekFields weekFields = WeekFields.of(Locale.getDefault());
+						    int tempWeek=inputMonth.get(weekFields.weekOfWeekBasedYear());
+						    System.out.println(tempWeek);
+						    //2021-11-1-월요일의 주차 -> 45주차
+							/*  
+							 * 해당 주차의 월요일 날짜 구하기 
+							 * 2021-1-1-금요일 : X
+							 * 2021-1-4-월요일 : 1주차 기준
+							 */
+							LocalDate desiredDate = inputMonth
+							            .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, tempWeek+week-2)//주기준 연도내의 주
+							            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));//DayOfWeek.MONDAY = 해당 주차에 월요일
+							//결과 : 2021-11-1-월요일
+							System.out.println(desiredDate);
+							if(!category.equals("all")) {
+								sql = "rsv_date BETWEEN date('"+desiredDate+"')AND date('"+desiredDate.plusDays(6)+"')"
+													+" AND sub_content = "+category;
+							}
+							System.out.println(sql);
 							List<AllViewEntity> rsvAllList = smpService.getScheduleList(sql, categoryNo);
 							try {
 								returnMassage = mapper.writeValueAsString(rsvAllList);
@@ -144,6 +147,8 @@ public class ApiScheduleController implements ControllerInterface {
 		System.out.println("returnMassage >>"+returnMassage);
 		return returnMassage;
 	}
-
+	
+	  
+	 
 
 }

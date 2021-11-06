@@ -29,7 +29,7 @@
 			<input type="button" value="모든 카테고리 보기" id="allContentBtn" class="contentBtn" />
 		</div>
 		<div class="btnContainer">
-			<input type="button" value="weekly" id="weeklyBtn" class="contentBtn" />
+			<input type="button" value="weekly" id="mwBtn" class="contentBtn" />
 			<input type="button" value="My Reservation" id="rsvBtn" class="contentBtn" />
 		</div>
 		<div class="testArea">
@@ -49,7 +49,7 @@
 				<div class='calendarWeekContainer week${i+1}'><!-- week 1 ~ 6 -->
 					<c:forEach var="j" begin="0" end="6">
 						<div class='calendar_day'>
-							<span></span><span></span>
+							<span ></span><span id="monthData"></span>
 						</div>
 					</c:forEach>
 				</div>
@@ -68,12 +68,13 @@
 			<div class="weekContainer">
 				<div id="calendar">
 					<div class="dayHeaderContainer">
-						<c:forEach var="item" items="${days}" varStatus="idx">
-							<div class="dayHeader">
-								<span>${item}</span><span class="dayoftheweek">NoneData</span>
-							</div>
-						</c:forEach>
-					</div>
+							<c:forEach var="item" items="${days}" varStatus="idx">
+								<div class="dayHeader">
+									<span>${item}&nbsp&nbsp</span>
+									<span class="dayoftheweek${idx.index}">NoneData</span>
+								</div>
+							</c:forEach>
+						</div>
 
 					<div id="calendar_value">
 						<div>
