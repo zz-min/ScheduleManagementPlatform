@@ -13,7 +13,7 @@
 	
 	</div>
 	
- 	<!------------------------- category button - login dialog ------------------------->
+ 	<!------------------------- login dialog ------------------------->
 	<div id="user-login-dialog-form" class="dialog" title="로그인">
 		<div class="login_property">
 			<div id="loginPropertyLeft" style="display: inline-block">
@@ -32,6 +32,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div><!-- login-dialog-form END-->
 	
 <%@include file ="/WEB-INF/views/footer.jsp" %>

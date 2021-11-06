@@ -5,6 +5,14 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	$(".weeklyCalendar").hide();
 	$(".userScheduleContainer").hide();
 	
+	$(".calendar_day").on("click",function(){
+		rsvDialog.dialog("open");
+		$("#rsv-dialog-date").text(`${today.getFullYear()}년 ${String(today.getMonth()+1).padStart(2,'0')}월 ${$(this).children().first().text()}일`);
+		$("#dialog-rsvList").html($(this).children().last().html());
+		
+		//today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text()
+	});
+	
 	var path = window.location.href;
 	var path_ = path.split('/').reverse()[0];
 	var categoryName=['studio','rental','consulting'];
@@ -135,8 +143,35 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			}
 		}
 	}
+	/* RSV dialog */
+	var rsvDialog, rsvForm;
+	rsvDialog = $("#rsv-dialog-form").dialog({
+		autoOpen : false,
+		height : 800,
+		width : 800,
+		modal : true,
+		buttons : {
+			"확인" : function() {
+				//rsvForm.trigger("submit");
+			},
+			"취소" : function() {
+				//rsvForm.dialog("close");
+			}
+		},
+		close : function() {
+			//rsvField.removeClass("ui-state-error");
+		}
+	});
+	
+	rsvForm = rsvDialog.find("form").on("submit", function(event) {
+		var valid = true;
+		userLoginField.removeClass("ui-state-error");
 
-
+		if (valid) {
+			userLoginDialog.dialog("close");
+		}
+		return valid;
+	});
 
 
 });
