@@ -1,5 +1,7 @@
 package com.web.smp.controller.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.List;
@@ -24,14 +26,22 @@ public class ApiScheduleController implements ControllerInterface {
 		String path = request.getRequestURI();
 		String[] temp=path.split("/");
 		String query=request.getQueryString();
-		System.out.println("ApiScheduleController path >>"+path+"?"+query);
+		System.out.println("ApiScheduleController path >>"+path+" ? "+query);
 		
 		String year=request.getParameter("year");
 		String month=request.getParameter("month");
 		int week=Integer.parseInt(request.getParameter("week"));
 		String id=request.getParameter("id");
-		String category=request.getParameter("category");//subcategory
-		String categoryNo=temp[3];//maincategory
+		String mainContent=request.getParameter("mainContent");
+		if(mainContent!=null) {
+			try {//카테고리이름 한글 디코딩처리 - URLDecoder.decode(NAME, "UTF-8")
+				mainContent = URLDecoder.decode(request.getParameter("mainContent"), "UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+		}
+		String subContent=request.getParameter("subContent");//subcategory
+		String categoryNo=temp[3];//maincategory - index로가져오기
 		
 		String sql=null;
 		// GET
@@ -58,24 +68,23 @@ public class ApiScheduleController implements ControllerInterface {
 				// POST : /api/schedules
 				// OR
 				// POST : /api/schedules/[카테고리번호]
-				
 				System.out.println("새로운 schedules정보 생성 - ApiScheduleController - POST");
-				
 			}
 		} else if (temp.length > 3) {// /api/schedules/temp[4] ? query
 			if (query == null) {// /api/schedules/[카테고리번호]
 				if (method.equals("GET")) {// schedules 카테고리번호것만 가져오기
-
+					System.out.println("해당 카테고리 전체 스케쥴 조회 - ApiScheduleController - GET");
 				} else if (method.equals("POST")) {// 카테고리번호의 새로운 schedules정보 생성하기
 					System.out.println("새로운 schedules정보 생성 - ApiScheduleController - POST");
 				}
-			} else if (query != null) {// /api/schedules?year=2021&month=10&week=0
-				// 해당가져오기
+			} else if (query != null) {//week=0 -> montly, week=1~6 -> weekly
+				// /api/schedules? year=2021 & month=10 & week=0 & subContent=사범관 & subContent=202
+				// /api/schedules? year=2021 & month=10 & week=0 & subContent= all
+				// /api/schedules? year=2021 & month=10 & week=0 & id= 201795032
 				if(id!=null) { // id정보로 해당 schedules 내용 조회
 					if (method.equals("GET")) {//특정 id의 schedules 정보가져오기
 						System.out.println("특정 id의  schedules정보 조회 - ApiScheduleController - GET");
 						sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+" AND user_id ="+id; 
-						
 						List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리중 특정 id만
 						try {
 							returnMassage = mapper.writeValueAsString(scheduleList);
@@ -91,10 +100,11 @@ public class ApiScheduleController implements ControllerInterface {
 					if (method.equals("GET")) {
 						if (week==0) { // monthly DATA 구하기
 							System.out.println("monthly DATA 구하기");
-							if(category.equals("all")) {
+							if(subContent.equals("all")) {
 								sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month;
 							}else {
-								sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+" AND sub_content = "+category;
+								sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+
+										" AND main_content = '"+mainContent+"' AND sub_content = "+subContent;
 							}
 							System.out.println(sql);
 							List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리에 전체
@@ -127,10 +137,8 @@ public class ApiScheduleController implements ControllerInterface {
 							            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));//DayOfWeek.MONDAY = 해당 주차에 월요일
 							//결과 : 2021-11-1-월요일
 							System.out.println(desiredDate);
-							if(!category.equals("all")) {
-								sql = "rsv_date BETWEEN date('"+desiredDate+"')AND date('"+desiredDate.plusDays(6)+"')"
-													+" AND sub_content = "+category;
-							}
+							sql = "rsv_date BETWEEN date('" + desiredDate + "')AND date('" + desiredDate.plusDays(6)
+									+ "')" + " AND main_content = '" + mainContent+"' AND sub_content = " + subContent;
 							System.out.println(sql);
 							List<AllViewEntity> rsvAllList = smpService.getScheduleList(sql, categoryNo);
 							try {

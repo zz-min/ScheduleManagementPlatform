@@ -34,38 +34,27 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	let prev_lastDate_CD;//CD 달의 지난 달의 마지막 날 (2021-10-31)
 	let weekDate;//weekly 날짜 저장
 	/* 알아보는 날짜 : 2021년 11월 1일 월요일
-	
 				Mon Nov 01 2021 01:24:19 GMT+0900 (한국 표준시)
 				getFullYear : 2021
 	(0~11)		getMonth : 10
 				getDate : 1
 	(0일~6토)		getDay : 1
-	
 	*/
 	showMonth();
 	buildMonth();
-	//////////달력 - Monthly	
+	//////////////////////////////////////////////달력 - Monthly	
 	function buildMonth() {
 		firstDate_CD =new Date(currentDate);
         firstDate_CD.setDate(1);
-		
+		//헤더 변경
 		$(".currentCalendarHeader").html(`${currentDate.getFullYear()}년&nbsp;&nbsp;&nbsp;&nbsp;${currentDate.getMonth() + 1}월&nbsp;(월)`);
 		
 		var daySet = makeElementMonth(firstDate_CD);
 		monthlySetting(daySet);
-		var v1 = $("#checkedMainCategory").val();
-		var v2 = $("#checkedSubCategory").val();
-		if (v1 != 'none' && v2 != 'none') {
-			fetchData(`/api/schedules/${categoryNo}
+
+		fetchData(`/api/schedules/${categoryNo}
 				?year=${currentDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
-				&week=0&category=${v2}`,'monthly');
-		}else{
-			fetchData(`/api/schedules/${categoryNo}
-				?year=${currentDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
-				&week=0&category=all`,'monthly');
-		}
-	
-		
+				&week=0&subContent=all`,'monthly');
 	}
 	
 	function makeElementMonth(firstDate_CD) { // 11/6
@@ -88,7 +77,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			for (let j = 0; j < 7; j++) {//일요일~토요일을 위해 7번 반복
 				// <<1주차>> j < firstDayName: 이번 달 시작 요일 이전 일 때
 				if (i == 0 && j < firstDayName) {
-					daySet[cnt++] = `${(prev_lastDate_CD - (firstDayName - 1) + j)}`;
+					daySet[cnt++] = `${(prev_lastDate_CD.getDate() - (firstDayName - 1) + j)}`;
 				}
 				// <<1주차>> j == firstDayName: 이번 달 시작 요일일 때
 				else if (i == 0 && j == firstDayName) {
@@ -112,14 +101,20 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 	//////////달력 - weekly	
 	function buildWeek(week) {
-		weekDate=new Date(currentDate); 
-		weekDate.setDate(weekDate.getDate() + week * 7);  // 0 현재, -1 저번주, +1 다음주		 
 		
-		let title = "&nbsp;" + today.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;" + (today.getMonth() + 1) + "월&nbsp;(주)";
+		console.log("buildWeek함수 실행%%");
+		console.log("기존 currentDate >>"+currentDate);
+		currentDate.setDate(currentDate.getDate() + week * 7); // 0 현재, -1 저번주, +1 다음주		
+		console.log(week+"을 적용한 변경 currentDate >>"+currentDate);
+		weekDate=new Date(currentDate); 
+		console.log(weekDate);
+		console.log("변경된 currentDate를 가져온>>"+weekDate);
+		
+		let title = "&nbsp;" + weekDate.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;" + (weekDate.getMonth() + 1) + "월&nbsp;(주)";
 		for (let i = 0; i < 7; i++) {
 			if (weekDate.getDate() == 1)
 				title += " ~&nbsp;&nbsp;&nbsp;&nbsp; " + weekDate.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;"
-					+ (today.getMonth() + 1) + "월";
+					+ (weekDate.getMonth() + 1) + "월";
 			weekDate.setDate(weekDate.getDate() + 1);
 		}
 		weekDate.setDate(weekDate.getDate() - 7);//원상복구
@@ -129,14 +124,13 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		//rightSection칸에 weekly 소스 채우기
 		var daySet = makeElementWeek();
 		weeklySetting(daySet);		
-		
-		// 해당 주 첫번째 날, 마지막 날 저장
-		let firstWeekDay = daySet[0];
-		let lastWeekDay = daySet[6];
-		
-		//몇주차데이터 받을지 넘기기 -> getWeekOfMonth(oneday)
-		//2021년 11월 데이터 검기기 -> 2021, 11
-		alert("카테고리를 선택해주세요.");
+		var v1 = $("#checkedMainCategory").val();
+		var v2 = $("#checkedSubCategory").val();
+		if(v1!=null && v2!=null){
+			$("#checkedContentBtn").click();
+		}else{
+			alert("카테고리를 선택하시면 스케쥴이 보여집니다.");
+		}
 	}
 	function makeElementWeek() {
 		var daySet = [];
@@ -151,7 +145,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			daySet[cnt] = `${weekDate.getDate()}`;
 			weekDate.setDate(weekDate.getDate() + 1);//날짜 증가시키기
         }
-		weekDate.setDate(weekDate.getDate()-7);//원래대로 원상복구
+		console.log("weekly dayset >> "+daySet[0]+" ~ "+daySet[6]);
 		return daySet;
     }
 	function monthlySetting(daySet) {
@@ -280,6 +274,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 
 	function clickWeek(cnt) {
+		currentDate=new
 		buildWeek(cnt);
 	}
 	function removeDataMonth() {//Monthly내부에 달력내용만 지우기
@@ -310,9 +305,9 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	
 	$("#checkedMainCategory").change(function() {//메인 카테고리에 따른 서브카테고리목록 반환
 		var v1 = $("#checkedMainCategory").val();
-		console.log("checkedMainCategory값 변동 함수 작동 >>" +`/api/contents/${categoryNo}?mainCategory=${encodeURI(encodeURIComponent(v1))}`);
+		console.log("checkedMainCategory값 변동 함수 작동 >>" +`/api/contents/${categoryNo}?mainContent=${encodeURI(encodeURIComponent(v1))}`);
 		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
-		fetchData(`/api/contents/${categoryNo}?mainCategory=${encodeURI(encodeURIComponent(v1))}`, 'category');
+		fetchData(`/api/contents/${categoryNo}?mainContent=${encodeURI(encodeURIComponent(v1))}`, 'category');
 	});
 	
 	$("#checkedContentBtn").click(function() {//카테고리 선택 후 선택된 카테고리 내용만 보기
@@ -323,11 +318,12 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 				removeDataMonth();
 				fetchData(`/api/schedules/${categoryNo}
 					?year=${currentDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
-					&week=0&category=${v2}`,'monthly');
+					&week=0&mainContent=${encodeURI(encodeURIComponent(v1))}&subContent=${v2}`,'monthly');
 			}else if ($("#mwBtn").val() == 'monthly'){//주간 캘린더
+					$("#allContentBtn").toggleClass('active');
 					fetchData(`/api/schedules/${categoryNo}
 					?year=${weekDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
-					&week=${getWeekOfMonth(weekDate)}&category=${v2}`,'weekly');
+					&week=${getWeekOfMonth(weekDate)}&mainContent=${encodeURI(encodeURIComponent(v1))}&subContent=${v2}`,'weekly');
 			}
 		}else{
 			alert("카테고리를 먼저 선택해주세요");
@@ -335,9 +331,11 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	});
 	$("#allContentBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly'){//전체보기 기능은 한달보기에서만 존재
+			$("#allContentBtn").toggleClass('active');
+			removeDataMonth();
 			fetchData(`/api/schedules/${categoryNo}
 				?year=${currentDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
-				&week=0&category=all`,'monthly');
+				&week=0&subContent=all`,'monthly');
 		}
 	});
 	
@@ -352,10 +350,11 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			showMonth();
 			buildMonth();//화면에 monthly띄우기
 			$("#allContentBtn").show();
+			$("#checkedSubCategory").val('none');
 		}
 	});
 	$("#rsvBtn").click(function() {
-		removeDataMonth();
+		$(this).toggleClass('active');
 	});
 	
 	
@@ -372,7 +371,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	$("#checkedMainDialog").change(function() {
 		var v = $("#checkedMainDialog").val();
 		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
-		fetchData(`/api/contents/${categoryNo}?mainCategory=${encodeURI(encodeURIComponent(v))}`, 'categoryDialog');
+		fetchData(`/api/contents/${categoryNo}?mainContent=${encodeURI(encodeURIComponent(v))}`, 'categoryDialog');
 	});	
 	
 	rsvDialog = $("#rsv-dialog-form").dialog({

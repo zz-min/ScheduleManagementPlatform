@@ -6,14 +6,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.sound.midi.ControllerEventListener;
-import javax.sound.midi.ShortMessage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.smp.controller.SmpService;
-import com.web.smp.di.entity.AllViewEntity;
 
 public class ApiContentController implements ControllerInterface {
 	
@@ -30,11 +26,13 @@ public class ApiContentController implements ControllerInterface {
 		
 		int categoryNo= Integer.parseInt(temp[3]);
 		
-		String mainCategory=null;
-		try {//카테고리이름 한글 디코딩처리 - URLDecoder.decode(NAME, "UTF-8")
-			mainCategory = URLDecoder.decode(request.getParameter("mainCategory"), "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
+		String mainContent=request.getParameter("mainContent");
+		if(mainContent!=null) {
+			try {//카테고리이름 한글 디코딩처리 - URLDecoder.decode(NAME, "UTF-8")
+				mainContent = URLDecoder.decode(request.getParameter("mainContent"), "UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
 		}
 		
 		
@@ -65,8 +63,8 @@ public class ApiContentController implements ControllerInterface {
 			if (method.equals("GET")) {
 				if (query == null) {// /api/contents/[카테고리번호] - 특정 category 에서만 사용되는 contents 정보가져오기
 
-				} else if (query != null) {// /api/contents/[카테고리번호] ? mainCategory= '웹캠' - 매인카테고리에 해당되는 서브카테고리 contents 정보가져오기
-					String sql = "category="+categoryNo+" AND main_content ='"+mainCategory+"'";
+				} else if (query != null) {// /api/contents/[카테고리번호] ? mainContent= '웹캠' - 매인카테고리에 해당되는 서브카테고리 contents 정보가져오기
+					String sql = "category="+categoryNo+" AND main_content ='"+mainContent+"'";
 					System.out.println(sql);
 					List<String> scheduleList = smpService.getSubCategory(sql);
 					try {
