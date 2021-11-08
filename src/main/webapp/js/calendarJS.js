@@ -101,14 +101,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 	//////////달력 - weekly	
 	function buildWeek(week) {
-		
-		console.log("buildWeek함수 실행%%");
-		console.log("기존 currentDate >>"+currentDate);
 		currentDate.setDate(currentDate.getDate() + week * 7); // 0 현재, -1 저번주, +1 다음주		
-		console.log(week+"을 적용한 변경 currentDate >>"+currentDate);
 		weekDate=new Date(currentDate); 
-		console.log(weekDate);
-		console.log("변경된 currentDate를 가져온>>"+weekDate);
 		
 		let title = "&nbsp;" + weekDate.getFullYear() + "년&nbsp;&nbsp;&nbsp;&nbsp;" + (weekDate.getMonth() + 1) + "월&nbsp;(주)";
 		for (let i = 0; i < 7; i++) {
@@ -126,7 +120,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		weeklySetting(daySet);		
 		var v1 = $("#checkedMainCategory").val();
 		var v2 = $("#checkedSubCategory").val();
-		if(v1!=null && v2!=null){
+		if(v1!='none' && v2!='none'){
 			$("#checkedContentBtn").click();
 		}else{
 			alert("카테고리를 선택하시면 스케쥴이 보여집니다.");
@@ -159,8 +153,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 	function weeklySetting(daySet) {
 		var cnt = 0;
-		for (let i = 7; i < 14; i++) {//0~6
-			$(".dayHeaderContainer").children(":eq(" + i + ")").children().last().html(`${daySet[cnt++]}`);
+		for (let i = 0; i < 7; i++) {//0~6
+			$(".weekDayHeaderContainer").children(":eq(" + i + ")").children().last().html(`${daySet[cnt++]}`);
 		}
 	}
 	
@@ -194,62 +188,73 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			} else if (pageVal === 'weekly'){
 				var temp = "";
 
-				$(".timeLineItemValue").css("background-color", "white"); // select 값이나 주가 변경되면 타임테이블 배경색을 흰색으로 초기화
-				$(".timeLineItemValueFirst").css("background-color", "white"); // select 값이나 주가 변경되면 타임테이블 배경색을 흰색으로 초기화
+				$(".weekItem").css("background-color", "wheat"); // select 값이나 주가 변경되면 타임테이블 배경색을 흰색으로 초기화
 
 				for (var value of json) {
-						console.log("weekly json 처리 실행");
-						let inputDayNumber = value.rsv_date.substr(8, 2);// rsv_date : 2021-11-05 -> 05
-						
-						for (let cnt = 0; cnt < 7; cnt++) {
-							let dayNumber =String($('.dayoftheweek' + cnt).text()).padStart(2,'0'); //header의 숫자 2자리로만들기
-							
-							if (inputDayNumber === dayNumber) {
-								alert(inputDayNumber);
-								// start time 추출
-								let s_hour = `${value.start_time}`;
-								s_hour = s_hour.substr(0, 2);
-								let s_minute = `${value.start_time}`;
-								s_minute = s_minute.substr(3, 2);
+					/*
+					{"schedule_seq":33,
+					"category":1,
+					"main_content":"사범관",
+					"sub_content":"202",
+					"user_type":"P",
+					"user_id":"600548",
+					"user_name":"홍길동",
+					"rsv_date":"2021-11-08",
+					"start_time":"10:00",
+					"end_time":"15:00"}						
+					*/
+					console.log("weekly json 처리 실행");
+					let inputDayNumber = value.rsv_date.substr(8, 2);// rsv_date : 2021-11-08 -> 08
+					console.log("inputDayNumber >> " + inputDayNumber);//08
 
-								// end time 추출
-								let e_hour = `${value.end_time}`;
-								e_hour = e_hour.substr(0, 2);
-								let e_minute = `${value.end_time}`;
-								e_minute = e_minute.substr(3, 2);
-								console.log("e_hour : " + e_hour + " e_minute : " + e_minute);
+					for (let cnt = 0; cnt < 7; cnt++) {
+						let dayNumber = String($('.dayoftheweek' + cnt).text()).padStart(2, '0'); //header의 숫자 2자리로만들기
+						console.log("dayNumber >> " + dayNumber);//8 -> 08
+						if (inputDayNumber === dayNumber) {// 08 === 08
+							// start time 추출 - 10:00
+							let s_hour = `${value.start_time}`;
+							s_hour = s_hour.substr(0, 2); //10
+							let s_minute = `${value.start_time}`;
+							s_minute = s_minute.substr(3, 2); //00
 
-								// 색깔 칠하기
-								let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16); // 랜덤 색상 생성
-								
-								for (let i = parseInt(s_hour); i <= parseInt(e_hour); i++) {
-									let temp_i = String(i); // i 값을 문자로 변환
-									if (temp_i.length == 1) temp_i = "0" + temp_i; // i가 한자리면 앞에 0추가
+							// end time 추출 - 15:00
+							let e_hour = `${value.end_time}`;
+							e_hour = e_hour.substr(0, 2);//15
+							let e_minute = `${value.end_time}`;
+							e_minute = e_minute.substr(3, 2);//00
+							console.log("startTime : " +s_hour+" : "+s_minute+" // endTime : " +s_minute+ e_hour +" : "+ e_minute);
 
-									if (i == parseInt(s_hour) && s_minute == "30") { // i가 시작시간의 시간과 같으면서 시작시간의 분이 30이면,
-										$('#' + cnt + temp_i + '30').css("background-color", colorCode);
-									} else {
-										if (i == parseInt(e_hour) && e_minute == "30") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 30이면,
-											$('#' + cnt + temp_i + '00').css("background-color", colorCode);
-										} else if (i == parseInt(e_hour) && e_minute == "00") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 00이면,
-											let temp_ehour = parseInt(e_hour);
-											temp_ehour--;
-											e_hour = String(temp_ehour);
-											if (e_hour.length == 1) {
-												e_hour = "0" + e_hour;
-											}
+							// 색깔 칠하기
+							let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16); // 랜덤 색상 생성
 
-											$('#' + cnt + temp_ehour + '30').css("background-color", colorCode);
-										} else {
-											$('#' + cnt + temp_i + '00').css("background-color", colorCode);
-											$('#' + cnt + temp_i + '30').css("background-color", colorCode);
+							for (let i = parseInt(s_hour); i <= parseInt(e_hour); i++) {
+								let temp_i = String(i); // i 값을 문자로 변환
+								if (temp_i.length == 1) temp_i = "0" + temp_i; // i가 한자리면 앞에 0추가
+
+								if (i == parseInt(s_hour) && s_minute == "30") { // i가 시작시간의 시간과 같으면서 시작시간의 분이 30이면,
+									$('#' + cnt + temp_i + '30').css("background-color", colorCode);
+								} else {
+									if (i == parseInt(e_hour) && e_minute == "30") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 30이면,
+										$('#' + cnt + temp_i + '00').css("background-color", colorCode);
+									} else if (i == parseInt(e_hour) && e_minute == "00") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 00이면,
+										let temp_ehour = parseInt(e_hour);
+										temp_ehour--;
+										e_hour = String(temp_ehour);
+										if (e_hour.length == 1) {
+											e_hour = "0" + e_hour;
 										}
 
+										$('#' + cnt + temp_ehour + '30').css("background-color", colorCode);
+									} else {
+										$('#' + cnt + temp_i + '00').css("background-color", colorCode);
+										$('#' + cnt + temp_i + '30').css("background-color", colorCode);
 									}
+
 								}
 							}
 						}
 					}
+				}
 			}else if (pageVal === 'category') {
 				$("#checkedSubCategory").find("option").remove();//기존 옵션 제거하고 선택된 메인카테고리에 따른 서브카테고리불러올 것
 				for (var value of json) {
@@ -273,10 +278,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		buildMonth();
 	}
 
-	function clickWeek(cnt) {
-		currentDate=new
-		buildWeek(cnt);
-	}
 	function removeDataMonth() {//Monthly내부에 달력내용만 지우기
 		var ps = document.querySelectorAll("#monthData");
 		for (i = 0; i < ps.length; i++) {
@@ -290,14 +291,14 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		if ($("#mwBtn").val() == 'weekly') {
 			clickMonth(-1);
 		} else if ($("#mwBtn").val() == 'monthly') {
-			clickWeek(-1);
+			buildWeek(-1);
 		} 
 	});
 	$("#nextBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly') {
 			clickMonth(1);
 		} else if ($("#mwBtn").val() == 'monthly') {
-			clickWeek(1);
+			buildWeek(1);
 		}
 	});
 	$("#todayBtn").click(function() {
@@ -322,8 +323,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			}else if ($("#mwBtn").val() == 'monthly'){//주간 캘린더
 					$("#allContentBtn").toggleClass('active');
 					fetchData(`/api/schedules/${categoryNo}
-					?year=${weekDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
-					&week=${getWeekOfMonth(weekDate)}&mainContent=${encodeURI(encodeURIComponent(v1))}&subContent=${v2}`,'weekly');
+					?year=${currentDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
+					&week=${getWeekOfMonth(currentDate)}&mainContent=${encodeURI(encodeURIComponent(v1))}&subContent=${v2}`,'weekly');
 			}
 		}else{
 			alert("카테고리를 먼저 선택해주세요");
