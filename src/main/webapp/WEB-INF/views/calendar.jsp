@@ -32,9 +32,7 @@
 			<input type="button" value="weekly" id="mwBtn" class="contentBtn" />
 			<input type="button" value="My Reservation" id="rsvBtn" class="contentBtn" />
 		</div>
-		<div class="testArea">
-		
-		</div>
+
 	</div>
 	<!--------------- RIGHT  --------------->
 	<div class="rightSection">
@@ -79,9 +77,7 @@
 				</div>
 
 				<div class="weekItemContainer">
-					<c:forEach var="i" begin="1" end="140">
-					 	<div class="weekItem"></div>
-					 </c:forEach>
+					
 				</div>				
 			</div>
 		</div>

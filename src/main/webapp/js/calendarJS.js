@@ -11,6 +11,12 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		$(".monthlyCalendar").hide();
 		$(".weeklyCalendar").show();
 		$(".userScheduleContainer").hide();
+		var str="";
+		for( var i=0; i<140;i++){
+			str+='<div class="weekItem"></div>';
+		}
+		$(".weekItemContainer").empty();
+		$(".weekItemContainer").append(str);
 	}
 	function showSchedule() {
 		$(".monthlyCalendar").hide();
@@ -176,7 +182,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 					var day = value.rsv_date.substr(8, 2);
 					var oneday = new Date(currentDate);
 					oneday.setDate(day);
-					$(".testArea").text('monthly');
 					if (oneday.getDay() == 0) {//일요일
 						$(".week" + getWeekOfMonth(oneday)).children(":eq(6)").
 						children().last().children().append(`<li>&nbsp&nbsp[ ${value.main_content} - ${value.sub_content} ] ${value.start_time}~${value.end_time}</li>`);
@@ -188,8 +193,8 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			} else if (pageVal === 'weekly'){
 				var temp = "";
 				var countingTime=0;
-
-				$(".weekItem").css("background-color", "wheat"); // select 값이나 주가 변경되면 타임테이블 배경색을 흰색으로 초기화
+				var count=1;
+				var divNo=140;
 			
 				for (var value of json) {
 					/*
@@ -200,17 +205,14 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 					"user_type":"P",
 					"user_id":"600548",
 					"user_name":"홍길동",
-					"rsv_date":"2021-11-08",
+					"rsv_date":"2021-11-08", -> inputDate.getDay() = 월요일 = 1 
 					"start_time":"10:00",
 					"end_time":"15:00"}						
 					*/
-					console.log("weekly json 처리 실행");
 					let inputDayNumber = value.rsv_date.substr(8, 2);// rsv_date : 2021-11-08 -> 08
-					console.log("inputDayNumber >> " + inputDayNumber);//08
 
 					for (let cnt = 0; cnt < 7; cnt++) {
 						let dayNumber = String($('.dayoftheweek' + cnt).text()).padStart(2, '0'); //header의 숫자 2자리로만들기
-						console.log("dayNumber >> " + dayNumber);//8 -> 08
 						if (inputDayNumber === dayNumber) {// 08 === 08
 							// start time 추출 - 10:00
 							let s_hour = `${value.start_time}`;
@@ -227,36 +229,37 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 
 							// 색깔 칠하기
 							let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16); // 랜덤 색상 생성
+							$(".weekItemContainer :nth-child("+count+")").css('background-color',colorCode);
 							
+							//요일에 따른 grid-column 설정 : 일요일만 7/8 나머지는 getDay()/getDay()+1
+							var inputDate=new Date(`${value.rsv_date}`);
+							var inputDay=inputDate.getDay();//월 1 ~ 토 6, 일요일 0
+							if(inputDay==0) $(".weekItemContainer :nth-child("+count+")").css('grid-column','7/8');
+							else $(".weekItemContainer :nth-child("+count+")").css('grid-column',`${inputDay}/${inputDay+1}`);
 							
+							// 시간에 따른 grid-row 설정 : 30분은 X 1시간째부터 +1칸
+							var	s_no=2*s_hour-17;
+							var	e_no=2*e_hour-17;
+							if (s_minute==30) s_no+=1;
+							if (e_minute==30) e_no+=1;
+							$(".weekItemContainer :nth-child("+count+")").css('grid-row',`${s_no}/${e_no}`);
 							
-							for (let i = parseInt(s_hour); i <= parseInt(e_hour); i++) {
-								let temp_i = String(i); // i 값을 문자로 변환
-								if (temp_i.length == 1) temp_i = "0" + temp_i; // i가 한자리면 앞에 0추가
-
-								if (i == parseInt(s_hour) && s_minute == "30") { // i가 시작시간의 시간과 같으면서 시작시간의 분이 30이면,
-									$('#' + cnt + temp_i + '30').css("background-color", colorCode);
-								} else {
-									if (i == parseInt(e_hour) && e_minute == "30") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 30이면,
-										$('#' + cnt + temp_i + '00').css("background-color", colorCode);
-									} else if (i == parseInt(e_hour) && e_minute == "00") { // i가 종료시간의 시간과 같으면서 종료시간의 분이 00이면,
-										let temp_ehour = parseInt(e_hour);
-										temp_ehour--;
-										e_hour = String(temp_ehour);
-										if (e_hour.length == 1) {
-											e_hour = "0" + e_hour;
-										}
-
-										$('#' + cnt + temp_ehour + '30').css("background-color", colorCode);
-									} else {
-										$('#' + cnt + temp_i + '00').css("background-color", colorCode);
-										$('#' + cnt + temp_i + '30').css("background-color", colorCode);
-									}
-
-								}
+							//TEXT값 넣기
+							$(".weekItemContainer :nth-child("+count+")").html(`<span>[ ${value.main_content} - ${value.sub_content} ] </span><br> <span>${value.start_time}~${value.end_time}</span>`);
+							
+							// 생성된 시간에 따른 div태그 삭제
+							countingTime=e_hour-s_hour;//10~15시 => 5
+							if(s_minute<e_minute) countingTime+=0.5//10시~15시 30분 => 5.5 
+							else if(s_minute>e_minute) countingTime-=0.5//10시30분 ~ 15시 => 4.5
+							
+							var countingTime_=(countingTime-0.5)/0.5;//5시간 => 9칸, 2시간 => 3칸
+							for(var i=0;i<countingTime_;i++){//지정 개수만큼 Grid에서 div태그지우기
+								$(".weekItemContainer :nth-child("+divNo+")").remove();
+								divNo--;
 							}
 						}
 					}
+					count++;
 				}
 			}else if (pageVal === 'category') {
 				$("#checkedSubCategory").find("option").remove();//기존 옵션 제거하고 선택된 메인카테고리에 따른 서브카테고리불러올 것
@@ -325,6 +328,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 					&week=0&mainContent=${encodeURI(encodeURIComponent(v1))}&subContent=${v2}`,'monthly');
 			}else if ($("#mwBtn").val() == 'monthly'){//주간 캘린더
 					$("#allContentBtn").toggleClass('active');
+					showWeek();
 					fetchData(`/api/schedules/${categoryNo}
 					?year=${currentDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
 					&week=${getWeekOfMonth(currentDate)}&mainContent=${encodeURI(encodeURIComponent(v1))}&subContent=${v2}`,'weekly');
