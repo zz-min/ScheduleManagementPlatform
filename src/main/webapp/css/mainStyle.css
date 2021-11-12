@@ -20,8 +20,6 @@ body{
     margin: 0;
     font-family: 'Source Sans Pro', sans-serif; 
     font-weight: 700;
-    width: 100%;
-    height: 100%;
     background-color: var(--color-white);
 }
 a{
@@ -131,23 +129,33 @@ a{
     height: 70vh;
     width: auto;
 }
+#home_form{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	width: 100%;
+	height: 100%;
+}
+#home_form > div{
+	margin-bottom: 30px;
+}
 #imgContatiner {
-    /* background-image: url(image.PNG);  */
-    background-color: red;
     width: 70%;
-    height: 60%;
+    margin:0 auto;
     min-width: 1255px;
+    display: flex;
 }
 #imgContatiner2{
     background-color: var(--color-point1);
     border-radius: 20px;
     width: 90%;
-    height: 12%;
+    height: 10%;
     min-width: 1255px;
-    max-width: 1290px;
+    margin: 0 auto;
 }
 #img{
-    width: 100%;
+    width: 50%;
     height: 100%;
 }
 #checkedCategory{

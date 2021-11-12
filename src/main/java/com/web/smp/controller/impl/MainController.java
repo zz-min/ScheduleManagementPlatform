@@ -38,7 +38,7 @@ public class MainController implements ControllerInterface {
 		List<String> mainContentList = smpService.getMainCategory(category);
 		request.setAttribute("mainContentList", mainContentList);
 
-		return "monthly.jsp";
+		return "calendar.jsp";
 	}
 
 }

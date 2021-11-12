@@ -187,9 +187,10 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 				}
 			} else if (pageVal === 'weekly'){
 				var temp = "";
+				var countingTime=0;
 
 				$(".weekItem").css("background-color", "wheat"); // select 값이나 주가 변경되면 타임테이블 배경색을 흰색으로 초기화
-
+			
 				for (var value of json) {
 					/*
 					{"schedule_seq":33,
@@ -222,11 +223,13 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 							e_hour = e_hour.substr(0, 2);//15
 							let e_minute = `${value.end_time}`;
 							e_minute = e_minute.substr(3, 2);//00
-							console.log("startTime : " +s_hour+" : "+s_minute+" // endTime : " +s_minute+ e_hour +" : "+ e_minute);
+							console.log("startTime : " +s_hour+" : "+s_minute+" // endTime : " +e_hour +" : "+ e_minute);
 
 							// 색깔 칠하기
 							let colorCode = "#" + Math.round(Math.random() * 0xffffff).toString(16); // 랜덤 색상 생성
-
+							
+							
+							
 							for (let i = parseInt(s_hour); i <= parseInt(e_hour); i++) {
 								let temp_i = String(i); // i 값을 문자로 변환
 								if (temp_i.length == 1) temp_i = "0" + temp_i; // i가 한자리면 앞에 0추가
@@ -343,6 +346,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	$("#mwBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly') {
 			$("#mwBtn").val('monthly');// 버튼 라벨 바꾸고
+			alert("weekly띄워주세용");
 			showWeek();
 			buildWeek(0);//화면에 weekly띄우기
 			$("#allContentBtn").hide();

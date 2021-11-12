@@ -24,10 +24,10 @@
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
-	<link href="/css/common.css" rel="stylesheet" type="text/css">
-	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css">
-	<link href="/css/dialog.css" rel="stylesheet" type="text/css">
-	<link href="/css/calendarStyle.css" rel="stylesheet" type="text/css">
+	<link href="/css/common.css" rel="stylesheet" type="text/css"><!-- 공통 -->
+	<link href="/css/dialog.css" rel="stylesheet" type="text/css"><!-- 모든 다이알로그 공통 -->
+	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css"><!-- main화면 -->
+	<link href="/css/calendarStyle.css?j" rel="stylesheet" type="text/css"><!-- 캘린더 화면 -->
 </head>
 <body>
 
@@ -48,7 +48,7 @@
 	<nav class="navbar">
     
         <div class="navbar_logo">
-        	<a href="/index">
+        	<a href="/main">
             <i class="fas fa-robot"></i><span>CTR System</span>
             </a>
         </div>

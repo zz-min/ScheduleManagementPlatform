@@ -9,7 +9,6 @@ import com.web.smp.controller.impl.ApiUserController;
 import com.web.smp.controller.impl.ControllerInterface;
 import com.web.smp.controller.impl.IndexController;
 import com.web.smp.controller.impl.MainController;
-import com.web.smp.controller.impl.StudioController;
 
 
 public class HandlerMapping {
@@ -18,7 +17,6 @@ public class HandlerMapping {
 	public HandlerMapping() {
 		handlerMapper = new HashMap<String, ControllerInterface>();
 
-		handlerMapper.put("/index", new IndexController());
 		handlerMapper.put("/main", new IndexController());
 		
 		handlerMapper.put("/main/studio", new MainController());

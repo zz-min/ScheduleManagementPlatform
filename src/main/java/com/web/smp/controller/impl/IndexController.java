@@ -9,7 +9,7 @@ public class IndexController implements ControllerInterface {
 
 	@Override
 	public String handleRequest(HttpServletRequest request, HttpServletResponse response, SmpService smpService) {
-		return "main2.jsp";
+		return "main.jsp";
 	}
 
 }
