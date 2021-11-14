@@ -382,24 +382,59 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		//한글깨짐 인코딩처리 - encodeURI(encodeURIComponent(v))
 		fetchData(`/api/contents/${categoryNo}?mainContent=${encodeURI(encodeURIComponent(v))}`, 'categoryDialog');
 	});	
+	$('#startTime').timepicki({
+		show_meridian:false,
+		min_hour_value:9,
+		max_hour_value:19,
+		increase_direction:'up',
+		start_time: ["09", "00"],
+		step_size_minutes:30
+	});
+	$('#endTime').timepicki({
+		show_meridian:false,
+		min_hour_value:9,
+		max_hour_value:19,
+		increase_direction:'up',
+		start_time: ["19", "00"],
+		step_size_minutes:30
+	});
+	$('#dialogSubmit').on("click", function() {
+		fetch('/api/schedules', {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json; charset=UTF-8"
+					},
+					body: JSON.stringify({
+						main_content: $('select[name=checkedMainDialog] option:selected').text(),
+						sub_content: $('select[name=checkedSubDialog] option:selected').text(),
+						rsv_date: $('#rsv-dialog-date').text(),
+						start_time: $('#startTime').val(),
+						end_time: $('#endTime').val()
+					}),
+					dataType : 'json'
+				})
+					.then(response => response.json())
+					.then(data => console.log(data))
+					.then(t())
+					.then(alert("예약되었습니다"))
+					.then(location.reload())
+					.catch(error => console.log(error))
+	});
+
+	$('#dialogCancle').on("click", function() {
+		rsvDialog.dialog("close");
+	});
 	
 	rsvDialog = $("#rsv-dialog-form").dialog({
 		autoOpen : false,
-		height : 800,
+		height : 850,
 		width : 800,
 		modal : true,
-		buttons : {
-			"확인" : function() {
-				//rsvForm.trigger("submit");
-			},
-			"취소" : function() {
-				rsvDialog.dialog("close");
-			}
-		},
-		close : function() {
-			
-		}
 	});
+	
+	function t() {
+		rsvDialog.dialog("close");
+	}
 	
 	rsvForm = rsvDialog.find("form").on("submit", function(event) {
 		var valid = true;

@@ -10,4 +10,5 @@ public interface ScheduleDao {
 	
 	List<AllViewEntity> getScheduleList(String query,String categoryNo);
 	
+	int insertSchedule(String userId, String main_content, String sub_content, String rsv_date, String startTime, String endTime);
 }

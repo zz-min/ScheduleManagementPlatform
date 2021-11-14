@@ -30,4 +30,6 @@ public interface SmpService {
 	Schedule getSchedule(int schedule_seq);
 
 	List<AllViewEntity> getScheduleList(String query,String category);
+	
+	int insertSchedule(String userId, String main_content, String sub_content, String rsv_date, String startTime, String endTime);
 }

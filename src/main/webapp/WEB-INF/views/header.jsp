@@ -28,6 +28,7 @@
 	<link href="/css/dialog.css" rel="stylesheet" type="text/css"><!-- 모든 다이알로그 공통 -->
 	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css"><!-- main화면 -->
 	<link href="/css/calendarStyle.css?j" rel="stylesheet" type="text/css"><!-- 캘린더 화면 -->
+	<link href='/css/timepicki.css' rel='stylesheet' type='text/css'/>
 </head>
 <body>
 

@@ -104,4 +104,55 @@ public class ScheduleJdbcDao implements ScheduleDao {
 		}
 		return scheduleList;
 	}
+
+	@Override
+	public int insertSchedule(String userId, String main_content, String sub_content, String rsv_date, String startTime,
+			String endTime) {
+		int result = 0;
+
+		String sql = "SELECT content_seq FROM content WHERE main_content = ? AND sub_content = ?";
+		String sql2 = "INSERT INTO schedule (content_no, user_id, rsv_date, start_time, end_time) VALUES "
+				+ "(?,?,?,?,?)";
+		try {
+			connect();
+
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, main_content);
+			stmt.setString(2, sub_content);
+			System.out.println("첫 번째 SQL = " + sql);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt("content_seq");
+				System.out.println("CONTENT_SEQ = " + result);
+
+				if (result != 0) {
+					stmt = conn.prepareStatement(sql2);
+					stmt.setInt(1, result);
+					stmt.setString(2, userId);
+					stmt.setString(3, rsv_date);
+					stmt.setString(4, startTime);
+					stmt.setString(5, endTime);
+					System.out.println("두 번째 SQL = " + sql2);
+
+					result = stmt.executeUpdate();
+				}
+			}
+
+
+
+
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				disconnect();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
 }
