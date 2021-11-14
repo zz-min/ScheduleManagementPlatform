@@ -42,6 +42,17 @@ public class ApiScheduleController implements ControllerInterface {
 		}
 		String id=request.getParameter("id");
 		String mainContent=request.getParameter("mainContent");
+		
+		String searchSelect = request.getParameter("searchSelect");
+		String textValue = request.getParameter("textValue");
+		if (textValue != null) {
+			try {// 카테고리이름 한글 디코딩처리 - URLDecoder.decode(NAME, "UTF-8")
+				textValue = URLDecoder.decode(textValue, "UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
 		if(mainContent!=null) {
 			try {//카테고리이름 한글 디코딩처리 - URLDecoder.decode(NAME, "UTF-8")
 				mainContent = URLDecoder.decode(request.getParameter("mainContent"), "UTF-8");
@@ -132,7 +143,14 @@ public class ApiScheduleController implements ControllerInterface {
 		} else if (temp.length > 3) {// /api/schedules/temp[4] ? query
 			if (query == null) {// /api/schedules/[카테고리번호]
 				if (method.equals("GET")) {// schedules 카테고리번호것만 가져오기
-					System.out.println("해당 카테고리 전체 스케쥴 조회 - ApiScheduleController - GET");
+					System.out.println("카테고리 번호 : " + categoryNo);
+					List<AllViewEntity> ScheduleList = smpService.getScheduleList("schedule_seq > 0", categoryNo);
+					try {
+						returnMassage = mapper.writeValueAsString(ScheduleList);
+					} catch (JsonProcessingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} 	
 			} else if (query != null) {//week=0 -> montly, week=1~6 -> weekly
 				// /api/schedules? year=2021 & month=10 & week=0 & subContent=사범관 & subContent=202
@@ -153,7 +171,19 @@ public class ApiScheduleController implements ControllerInterface {
 					} else if (method.equals("DELETE")) {// 특정 id의 schedule 정보 삭제하기
 
 					}
-				}else { // 날짜 정보로 해당 schedules 내용 조회
+				} else if (searchSelect != null) {
+					System.out.println(searchSelect);
+					System.out.println(textValue);
+					textValue = "'" + textValue + "'";
+					sql = searchSelect + "=" + textValue;
+					System.out.println(sql);
+					List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리중 특정 id만
+					try {
+						returnMassage = mapper.writeValueAsString(scheduleList);
+					} catch (JsonProcessingException e) {
+						e.printStackTrace();
+					}
+				} else { // 날짜 정보로 해당 schedules 내용 조회
 					if (method.equals("GET")) {
 						if (week==0) { // monthly DATA 구하기
 							System.out.println("monthly DATA 구하기");

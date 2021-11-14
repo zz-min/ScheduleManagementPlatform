@@ -24,11 +24,10 @@
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	
-	<link href="/css/common.css" rel="stylesheet" type="text/css"><!-- 공통 -->
-	<link href="/css/dialog.css" rel="stylesheet" type="text/css"><!-- 모든 다이알로그 공통 -->
-	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css"><!-- main화면 -->
-	<link href="/css/calendarStyle.css?j" rel="stylesheet" type="text/css"><!-- 캘린더 화면 -->
-	<link href='/css/timepicki.css' rel='stylesheet' type='text/css'/>
+	<link href="/css/common.css" rel="stylesheet" type="text/css">
+	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css">
+	<link href="/css/dialog.css" rel="stylesheet" type="text/css">
+	<link href="/css/calendarStyle.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -42,35 +41,31 @@
 	list.add("토");
 	list.add("일");
 	pageContext.setAttribute("daySet", list);
-
 	String[] days = { "월", "화", "수", "목", "금", "토", "일" };
 	pageContext.setAttribute("days", days);
 	%>
 	<nav class="navbar">
-    
-        <div class="navbar_logo">
-        	<a href="/main">
+        <div class="navbar_logo" id="Admin_logo">
+        	<a href="/managerMain">
             <i class="fas fa-robot"></i><span>CTR System</span>
             </a>
         </div>
         
         <ul class="navbar_menu">
+        	<li id="category0" class="menuBtn"><a href="/studio/admin/rsvCheck">전체 예약 목록</a></li>
             <li id="category1" class="menuBtn"><a href="/main/studio">Studio</a></li>
             <li id="category2" class="menuBtn"><a href="/main/rental">Rental</a></li>
             <li id="category3" class="menuBtn"><a href="/main/consulting">Consulting</a></li>
-            <li id="faqTest"><a href="/faq">FAQ</a></li>
+            <li id="category4"><a href="/faq">FAQ</a></li>
         </ul>
         
         <div class="navbar_icons">
-        	<div class="loginSection">
-            	<div class="loginSection" id="login">
+			<div class="loginSection" id="loginSectionAdmin">
             	<i class="fas fa-user-circle"></i>
-             	<span>Login</span>           	
+             	<span>관리자 모드</span><br>    
+             	<span id="settingsBtnAdmin" class="loginBtn_content">설정</span> 
+				<span id="logoutAdmin" class="loginBtn_content">logout</span>      	
             </div>
-            <div class="logoutSection">
-				<span id="logoutBtn" class="loginBtn_content">logout</span> 
-				<span id="mypageBtn" class="loginBtn_content">mypage</span>
-			</div>
         </div>
         
         <div class="navbar_toogleBtn"><!-- 메뉴버튼 -->
@@ -78,7 +73,7 @@
         </div>
     </nav>
     
-	<div class="custom-shape-divider-top-1635871786">
+	<div class="custom-shape-divider-top-1635871786" id="imageMain">
 		<svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 1200 120" preserveAspectRatio="none">
             <path

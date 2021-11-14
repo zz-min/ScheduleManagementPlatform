@@ -57,6 +57,10 @@ $(function() {
 				if (res == 'true') {
 					console.log("로그인 성공");
 					console.log(getCookie("userName"));
+					
+					var login_type = `/api/users/type?id=${id}`;
+					loginTypeFetch(login_type, id);
+					
 					$(".loginSection").children(":eq(1)").text(getCookie("userName"));
 					$(".logoutSection").show();
 					
@@ -67,6 +71,26 @@ $(function() {
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});
 	}
+	
+	function loginTypeFetch(url, id) {
+		console.log("loginTypeFetch함수 URL : " + url);
+		
+		fetch(url)
+			.then(res => res.text())
+			.then(res => {
+				if (res == 'true') {
+					console.log("type 가져오기 성공");
+					console.log(getCookie("loginType"));
+					
+					if (getCookie("loginType") == 'M') {
+						console.log("해당 계정의 type은 관리자");
+						alert("관리자 모드 실행!!!");
+						document.location.href="/managerMain";
+					}
+				}
+			})
+	}
+	
 	function getCookie(cookie_name) {
 		//document.cookie => userId=600548; userName=홍길동; login=true
 		var x, y; 

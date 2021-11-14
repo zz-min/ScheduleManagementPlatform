@@ -11,6 +11,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.smp.controller.SmpService;
+import com.web.smp.di.entity.User;
 
 public class ApiUserController implements ControllerInterface {
 
@@ -50,7 +51,29 @@ public class ApiUserController implements ControllerInterface {
 				System.out.println("새로운 user정보 생성 - ApiUserController - POST");
 			}
 		} else if (temp.length > 3) {// /api/users/temp[4] ? query
-			if (temp[3].equals("login")) {
+			if (temp[3].equals("type")) {
+				System.out.println("type 확인 실행!!!");
+				// id 값을 이용하여 type 가져오기
+				String id = new String(base64.decode(request.getParameter("id").getBytes()));//디코딩된값
+				System.out.println(id + "를 이용하여 type 가지고 오기");
+				User user = smpService.getUser(id);
+				System.out.println("가지고 온 type은 " + user.getUser_type());
+				
+				if (user.getUser_type() != null) { // type을 성공적으로 가지고 오면
+					System.out.println("type은 null이 아니라서 if문이 실행됨!!!");
+					
+					Cookie cookieLoginType = new Cookie("loginType", user.getUser_type());
+					cookieLoginType.setPath("/"); // 모든 위치에서 사용가능
+					cookieLoginType.setMaxAge(30); //60s
+					
+					response.addCookie(cookieLoginType);
+					
+					HttpSession session=request.getSession(true);//가져올 세션이 없다면 새로 생성
+					session.setAttribute("loginType", user.getUser_type());
+					
+					returnMassage = "true";
+				} else returnMassage = "false";
+			} else if (temp[3].equals("login")) {
 				// 로그인 유효성 검사해주기
 				String id=new String(base64.decode(request.getParameter("id").getBytes()));//디코딩된값
 				String pwd=new String(base64.decode( request.getParameter("pwd").getBytes()));
