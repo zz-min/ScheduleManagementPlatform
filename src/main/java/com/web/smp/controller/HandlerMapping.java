@@ -25,8 +25,10 @@ public class HandlerMapping {
 		handlerMapper.put("/main/studio", new MainController());
 		handlerMapper.put("/main/rental", new MainController());
 		handlerMapper.put("/main/consulting", new MainController());
+		
 		handlerMapper.put("/managerMain", new managerMainController());
 		handlerMapper.put("/studio/admin", new managerRsvController());
+		
 		handlerMapper.put("/faq", new FaqController());
 		
 		handlerMapper.put("/api/users", new ApiUserController());

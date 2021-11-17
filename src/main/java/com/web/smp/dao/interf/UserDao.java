@@ -10,6 +10,7 @@ public interface UserDao {
 	User getUser(String id);
 	
 	String getUserName(String id);
+	String getUserType(String id);
 	
 	List<User> getUserList(String query);
 }

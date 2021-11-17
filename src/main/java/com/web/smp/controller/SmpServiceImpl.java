@@ -38,11 +38,16 @@ public class SmpServiceImpl implements SmpService {
 	public String getUserName(String id) {
 		return userDao.getUserName(id);
 	}
+	@Override
+	public String getUserType(String id) {
+		return userDao.getUserType(id);
+	}
 
 	@Override
 	public List<User> getUserList(String query) {
 		return userDao.getUserList(query);
 	}
+	
 	/* Content Dao */
 
 	@Override
@@ -79,8 +84,8 @@ public class SmpServiceImpl implements SmpService {
 	@Override
 	public int insertSchedule(String userId, String main_content, String sub_content, String rsv_date, String startTime,
 			String endTime) {
-		// TODO Auto-generated method stub
 		return scheduleDao.insertSchedule(userId, main_content, sub_content, rsv_date, startTime, endTime);
 	}
+
 	
 }

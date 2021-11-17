@@ -177,4 +177,32 @@ public class UserJdbcDao implements UserDao {
 		return userName;
 	}
 
+	@Override
+	public String getUserType(String id) {
+		String userType=null;
+		String sql = "select user_type from user where user_id = ?";
+		System.out.println("getUserType함수 sql>>"+sql);
+		try {
+			connect();
+			
+			stmt =  conn.prepareStatement(sql);
+			stmt.setString(1, id);
+			
+			rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				userType =rs.getString("user_type");
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+				try {
+					disconnect();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return userType;
+	}
+
 }

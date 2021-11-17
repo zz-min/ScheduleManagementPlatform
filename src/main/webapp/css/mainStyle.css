@@ -71,13 +71,26 @@ a{
 .loginSection i{
     padding-right: 10px;
 }
+#loginZone:hover{
+    background-color: var(--color-green1);
+    border-radius: 6px;
+    margin: 10px;
+}
 .logoutSection{
 	font-size: 15px;
 	display: none;
 }
-.logoutSection sapn :hover {
+.logoutSection.active{
+	display: inline-block;
+}
+
+.logoutSection span:hover {
     background-color: var(--color-green1);
     border-radius: 6px;
+}
+.loginBtn_content{
+    margin: 10px;
+	padding: 5px;
 }
 
 .navbar_toogleBtn{
@@ -157,7 +170,4 @@ a{
 #img{
     width: 50%;
     height: 100%;
-}
-#checkedCategory{
-	/* display: none; */
 }

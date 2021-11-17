@@ -127,13 +127,10 @@
 .calendar_day>span:first-child {
 	font-size: 1.1em;
 	margin: 0.4em;
+	height:15%;
 }
 .calendar_day>span:last-child {
-	height:65%;
-	/* 
-	overflow-y:scroll;
-	overflow-x:clip;
-	 */
+	height:71%;
 	font-size: 0.8em;
 }
 

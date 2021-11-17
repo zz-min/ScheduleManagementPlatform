@@ -6,9 +6,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.web.smp.controller.impl.ControllerInterface;
 import com.web.smp.dao.impl.ContentJdbcDao;
@@ -48,7 +50,6 @@ public class DispatcherServlet extends HttpServlet {
 		ScheduleDao scheduleDao=new ScheduleJdbcDao(driver, url, userName, password);
 		
 		smpService = new SmpServiceImpl(userDao,contentDao,scheduleDao);
-
 		mapper = new HandlerMapping();
 	}
 
@@ -75,6 +76,9 @@ public class DispatcherServlet extends HttpServlet {
 			response.getWriter().write(data);
 
 		} else {//페이지 이동
+			Cookie[] cookies = request.getCookies() ;
+			HttpSession session=request.getSession(false);//가져올 세션이 없다면 false반환
+			//f()
 			if (handler != null) {
 				//session이 있거나 cookie가 존재하면 넘어가기 -> 아니라면 알람띄우고 메인페이지
 				viewName = handler.handleRequest(request, response, smpService);

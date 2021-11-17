@@ -79,7 +79,6 @@ public class ContentJdbcDao implements ContentDao {
 				mainCategoryList=new ArrayList<String>();
 				
 				while(rs.next()) {
-					System.out.println(rs.getString("main_content"));
 					mainCategoryList.add(rs.getString("main_content"));
 				}
 			}

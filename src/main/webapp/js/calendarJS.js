@@ -175,7 +175,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	async function fetchData(url, pageVal){
 		const response = await fetch(url);
 		const json = await response.json();
-		console.log(pageVal);
 		if (json != null) {
 			if (pageVal === 'monthly') {
 				for (var value of json) {
@@ -188,6 +187,12 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 					} else {//1~6 월~토
 						$(".week" + getWeekOfMonth(oneday)).children(":eq(" + (oneday.getDay() - 1) + ")").
 						children().last().children().append(`<li>&nbsp&nbsp[ ${value.main_content} - ${value.sub_content} ] ${value.start_time}~${value.end_time}</li>`);
+					}
+				}
+				for(var i=0;i<5;i++){
+					for(var j=0;j<6;j++){
+						var h=$(".week" + i).children(":eq("+j+")").children().last().children().height();
+						if(h>71) $(".week" + i).children(":eq("+j+")").children().last().css('overflow-y','scroll');
 					}
 				}
 			} else if (pageVal === 'weekly'){
@@ -293,8 +298,17 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 	/************************LEFT*************************/
 	
+	function resetScroll(){
+		for (var i = 0; i < 5; i++) {
+			for (var j = 0; j < 6; j++) {
+				var h = $(".week" + i).children(":eq(" + j + ")").children().last().children().height();
+				if (h > 71) $(".week" + i).children(":eq(" + j + ")").children().last().css('overflow-y', 'inherit');
+			}
+		}
+	}
 	$("#prevBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly') {
+			resetScroll();
 			clickMonth(-1);
 		} else if ($("#mwBtn").val() == 'monthly') {
 			buildWeek(-1);
@@ -302,6 +316,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	});
 	$("#nextBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly') {
+			resetScroll();
 			clickMonth(1);
 		} else if ($("#mwBtn").val() == 'monthly') {
 			buildWeek(1);
@@ -350,7 +365,6 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	$("#mwBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly') {
 			$("#mwBtn").val('monthly');// 버튼 라벨 바꾸고
-			alert("weekly띄워주세용");
 			showWeek();
 			buildWeek(0);//화면에 weekly띄우기
 			$("#allContentBtn").hide();
@@ -398,27 +412,27 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		start_time: ["19", "00"],
 		step_size_minutes:30
 	});
+	
 	$('#dialogSubmit').on("click", function() {
 		fetch('/api/schedules', {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json; charset=UTF-8"
-					},
-					body: JSON.stringify({
-						main_content: $('select[name=checkedMainDialog] option:selected').text(),
-						sub_content: $('select[name=checkedSubDialog] option:selected').text(),
-						rsv_date: $('#rsv-dialog-date').text(),
-						start_time: $('#startTime').val(),
-						end_time: $('#endTime').val()
-					}),
-					dataType : 'json'
-				})
-					.then(response => response.json())
-					.then(data => console.log(data))
-					.then(t())
-					.then(alert("예약되었습니다"))
-					.then(location.reload())
-					.catch(error => console.log(error))
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json; charset=UTF-8"
+			},
+			body: JSON.stringify({
+				main_content: $('select[name=checkedMainDialog] option:selected').text(),
+				sub_content: $('select[name=checkedSubDialog] option:selected').text(),
+				rsv_date: $('#rsv-dialog-date').text(),
+				start_time: $('#startTime').val(),
+				end_time: $('#endTime').val()
+			}),
+			dataType: 'json'
+		})
+			.then(response => console.log(response))
+			.then(rsvDialog.dialog("close"))
+			.then(alert("예약되었습니다"))
+			.then(buildMonth())//location.reload()
+			.catch(error => console.log(error))
 	});
 
 	$('#dialogCancle').on("click", function() {
@@ -429,13 +443,9 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		autoOpen : false,
 		height : 850,
 		width : 800,
-		modal : true,
+		modal : true
 	});
-	
-	function t() {
-		rsvDialog.dialog("close");
-	}
-	
+
 	rsvForm = rsvDialog.find("form").on("submit", function(event) {
 		var valid = true;
 
@@ -444,5 +454,25 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 		return valid;
 	});
+	$("#logoutBtn").on("click", function() {
+		alert("로그아웃z");
+		/*$(".logoutSection").removeClass('active');
+		$("#loginZone").children(":eq(1)").text('Login');	*/
+		delAllCookie();
+		//location.replace("/main");
+	});
+	$("#mypageBtn").on("click", function() {
+		alert("마이페이지");
+	});
+	function delAllCookie() {
+		var x, y;
+		var val = document.cookie.split(';');
+		for (var item of val) {
+			x = item.substr(0, item.indexOf('='));
+			y = item.substr(item.indexOf('=') + 1);
+			x = x.replace(/^\s+|\s+$/g, '');// 앞과 뒤의 공백 제거하기 
+			document.cookie = `${x}=;Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		}
+	}
 
 });

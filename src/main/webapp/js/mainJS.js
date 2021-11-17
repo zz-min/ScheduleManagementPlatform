@@ -49,61 +49,70 @@ $(function() {
 	}
 	
 	function loginFetch(url, id, pwd) {//GET메소드
-		console.log("loginFetch함수 URL : " + url);
-
 		fetch(url)
 			.then(res => res.text())
 			.then(res => {
 				if (res == 'true') {
-					console.log("로그인 성공");
-					console.log(getCookie("userName"));
+					console.log("로그인 성공 쿠키에 정된 '"+getCookie("userName")+"'이름의 타입 :"+getCookie("userType"));
 					
-					var login_type = `/api/users/type?id=${id}`;
-					loginTypeFetch(login_type, id);
-					
-					$(".loginSection").children(":eq(1)").text(getCookie("userName"));
-					$(".logoutSection").show();
+					if(getCookie("userType")==='M'){
+						alert("관리자로 로그인하셨습니다 :)");
+						document.location.href="/managerMain";
+					}else{
+						$("#loginZone").children(":eq(1)").text(getCookie("userName"));
+						$(".logoutSection").addClass('active');					
+					}
 					
 					userLoginDialog.dialog("close");
-					
-					//var index = $("#checkedCategory").text().substr(8);
-					//window.location.assign("/main?category=" + index+"&id="+$("#userId").val());
+
+
 				} else alert("아이디와 비밀번호를 다시 확인해 주세요."); 
 			});
 	}
 	
-	function loginTypeFetch(url, id) {
-		console.log("loginTypeFetch함수 URL : " + url);
-		
-		fetch(url)
-			.then(res => res.text())
-			.then(res => {
-				if (res == 'true') {
-					console.log("type 가져오기 성공");
-					console.log(getCookie("loginType"));
-					
-					if (getCookie("loginType") == 'M') {
-						console.log("해당 계정의 type은 관리자");
-						alert("관리자 모드 실행!!!");
-						document.location.href="/managerMain";
-					}
-				}
-			})
-	}
-	
 	function getCookie(cookie_name) {
 		//document.cookie => userId=600548; userName=홍길동; login=true
-		var x, y; 
+		var x, y;
 		var val = document.cookie.split(';');
-		for (var i = 0; i < val.length; i++) {
-			x = val[i].substr(0, val[i].indexOf('='));
-			y = val[i].substr(val[i].indexOf('=') + 1);
+		for (var item of val) {
+			x = item.substr(0, item.indexOf('='));
+			y = item.substr(item.indexOf('=') + 1);
 			x = x.replace(/^\s+|\s+$/g, '');// 앞과 뒤의 공백 제거하기 
-			if (x == cookie_name) {return unescape(y); }// unescape로 디코딩 후 값 리턴 
+			if (x == cookie_name) { return unescape(y); }// unescape로 디코딩 후 값 리턴 
 		}
 	} 
-	$(".navbar_icons").children().on("click", function() {
+	function delCookie(cookie_name) {
+		let date = new Date();
+		date.setDate(date.getDate() - 100);
+		let Cookie = `${cookie_name}=;Expires=Thu, 01 Jan 1970 00:00:00 GMT`
+		document.cookie = Cookie;
+	}
+	function delAllCookie() {
+		var x, y;
+		var val = document.cookie.split(';');
+		for (var item of val) {
+			x = item.substr(0, item.indexOf('='));
+			y = item.substr(item.indexOf('=') + 1);
+			x = x.replace(/^\s+|\s+$/g, '');// 앞과 뒤의 공백 제거하기 
+			console.log(x);
+			document.cookie = `${x}=;Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		}
+	}
+	$("#loginZone").on("click", function() {
 		userLoginDialog.dialog("open");
+	});
+	$("#logoutBtn").on("click", function() {
+		alert("로그아웃");
+		$(".logoutSection").removeClass('active');
+		$("#loginZone").children(":eq(1)").text('Login');
+		delAllCookie();
+		/*
+		delCookie('userId');		
+		delCookie('userName');		
+		delCookie('userType');*/		
+	});
+	$("#mypageBtn").on("click", function() {
+		alert("마이페이지");
 	});
 	
 });

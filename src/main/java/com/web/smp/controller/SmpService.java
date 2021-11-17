@@ -15,6 +15,8 @@ public interface SmpService {
 
 	String getUserName(String id);
 
+	String getUserType(String id);
+	
 	List<User> getUserList(String query);
 
 	/* Content Dao */

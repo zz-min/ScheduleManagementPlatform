@@ -14,6 +14,7 @@ import java.util.Locale;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -27,6 +28,7 @@ public class ApiScheduleController implements ControllerInterface {
 	public String handleRequest(HttpServletRequest request, HttpServletResponse response, SmpService smpService) {
 		String returnMassage=null;
 		ObjectMapper mapper = new ObjectMapper();
+		HttpSession session=request.getSession(false);//가져올 세션이 없다면 false
 		
 		String method = request.getMethod().toUpperCase();//요청메소드를 모두 대문자로반환 post -> POST
 		String path = request.getRequestURI();
@@ -86,7 +88,6 @@ public class ApiScheduleController implements ControllerInterface {
 		
 		if (temp.length == 3) {// /api/schedules
 			if (method.equals("GET")) {// schedules 전체목록 가져오기
-				//필요하지 않음
 				System.out.println("모든 schedules정보 조회 - ApiScheduleController - GET");
 			} else if (method.equals("POST")) {// 새로운 schedules 정보 생성하기
 				// POST : /api/schedules
@@ -104,26 +105,24 @@ public class ApiScheduleController implements ControllerInterface {
 			    }catch(Exception e) {
 			        System.out.println("Error reading JSON string: " + e.toString());
 			    }
-
 			    System.out.println(json);
-
+			    //{"main_content":"국제관","sub_content":"202","rsv_date":"2021년 11월 2일","start_time":"09:00","end_time":"10:00"}
 			    try {
 					allViewEntity = mapper.readValue(json, AllViewEntity.class);
 				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-			    System.out.println(allViewEntity.getMain_content()); // 공대
-
 			    Cookie[] cookies = request.getCookies() ;
-
-			    if(cookies != null){
-			    	Cookie c = cookies[0] ;
-			        userId = c.getValue(); // 201795037
+			    for(int i=0; i<cookies.length;i++) {
+			    	System.out.println(cookies[i].getName());
+			    	if(cookies[i].getName().equals("userId")) {
+			    		System.out.println(cookies[i].getValue()); 
+			    		userId =cookies[i].getValue();
+			    	}else {
+			    		userId=(String) session.getAttribute("userId");
+			    	}
 			    }
 
 			    String rsv_date = allViewEntity.getRsv_date();
@@ -133,12 +132,15 @@ public class ApiScheduleController implements ControllerInterface {
 			    System.out.println(rsv_date);
 
 
-			    int result = smpService.insertSchedule(userId, allViewEntity.getMain_content(), 
-			    		allViewEntity.getSub_content(), rsv_date, allViewEntity.getStart_time(), allViewEntity.getEnd_time());
+				
+				  int result = smpService.insertSchedule(userId,
+				  allViewEntity.getMain_content(), allViewEntity.getSub_content(), rsv_date,
+				  allViewEntity.getStart_time(), allViewEntity.getEnd_time());
+				 
 
-			    if(result == 1) {
-			    	returnMassage = "Insert success";
-			    }
+				
+				  if(result == 1) { returnMassage = "Insert success"; }
+				 
 			}
 		} else if (temp.length > 3) {// /api/schedules/temp[4] ? query
 			if (query == null) {// /api/schedules/[카테고리번호]
@@ -148,7 +150,6 @@ public class ApiScheduleController implements ControllerInterface {
 					try {
 						returnMassage = mapper.writeValueAsString(ScheduleList);
 					} catch (JsonProcessingException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} 	
@@ -186,14 +187,13 @@ public class ApiScheduleController implements ControllerInterface {
 				} else { // 날짜 정보로 해당 schedules 내용 조회
 					if (method.equals("GET")) {
 						if (week==0) { // monthly DATA 구하기
-							System.out.println("monthly DATA 구하기");
+							// /api/schedules/1 ? year=2021&month=11&week=0&subContent=all
 							if(subContent.equals("all")) {
 								sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month;
 							}else {
 								sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+
 										" AND main_content = '"+mainContent+"' AND sub_content = "+subContent;
 							}
-							System.out.println(sql);
 							List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리에 전체
 							try {
 								returnMassage = mapper.writeValueAsString(scheduleList);
@@ -201,11 +201,8 @@ public class ApiScheduleController implements ControllerInterface {
 								e.printStackTrace();
 							}
 						} else {// weekly DATA 구하기
-							System.out.println("weekly DATA 구하기");
-							//year, month, week
-							
-							/*
-							 * 주차구하기 
+							// /api/schedules/1 ? year=2021&month=11&week=1&subContent=all
+							/* 주차구하기 
 							 * 2021-1-1-금요일 : 1주차 기준
 							 * 2021-1-4-월요일 : 2주차 기준
 							 */
