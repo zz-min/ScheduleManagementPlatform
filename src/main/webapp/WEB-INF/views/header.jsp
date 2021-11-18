@@ -60,7 +60,8 @@
             <li id="category3" class="menuBtn"><a href="/main/consulting">Consulting</a></li>
             <li id="faqTest"><a href="/faq">FAQ</a></li>
         </ul>
-<c:if test="${cookie.userName.value==null&&sessionScope.userName==null}">
+<%-- <c:if test="${cookie.userName.value==null&&sessionScope.userName==null}"> --%>
+<c:if test="${cookie.userName.value==null}">
 		<div class="navbar_icons">
 				<div class="loginSection">
 					<a id="loginZone"> 
@@ -73,7 +74,8 @@
 			</div>
 		</div>
 </c:if>
-<c:if test="${cookie.userName.value!=null||sessionScope.userName!=null}">
+<%-- <c:if test="${cookie.userName.value!=null||sessionScope.userName!=null}"> --%>
+<c:if test="${cookie.userName.value!=null}">
 		<div class="navbar_icons">
 			<div class="loginSection">
 				<a id="loginZone">

@@ -63,15 +63,15 @@ public class ApiUserController implements ControllerInterface {
 					
 					Cookie cookieId=new Cookie("userId",id);
 					cookieId.setPath("/");//쿠키를 모든 위치에서 사용가능
-					cookieId.setMaxAge(360);//60s*6 = 6M
+					cookieId.setMaxAge(3600);//60s*6*10 = 60M = 1H
 					
 					Cookie cookieName=new Cookie("userName",userName);
 					cookieName.setPath("/");//쿠키를 모든 위치에서 사용가능
-					cookieName.setMaxAge(360);//60s
+					cookieName.setMaxAge(3600);//60s
 					
 					Cookie cookieType=new Cookie("userType",userType);
 					cookieType.setPath("/");//쿠키를 모든 위치에서 사용가능
-					cookieType.setMaxAge(360);//60s
+					cookieType.setMaxAge(3600);//60s
 					
 					response.addCookie(cookieId);
 					response.addCookie(cookieName);

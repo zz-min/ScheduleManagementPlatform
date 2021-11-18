@@ -16,22 +16,22 @@
 		<div class="contentContainer">
 			<h2>카테고리 선택</h2> 
 			<form class="contentForm">
-				<select name="checkedMain" id="checkedMainCategory" class="checkedContentSelect">
+				<select name="checkedMain" id="checkedMainCategory" class="checkedContentSelect" style="cursor:pointer">
 					<option value="none">= 매인 카테고리 =&nbsp&nbsp</option>
 					<c:forEach var="i" begin="0" end="${fn:length(mainContentList)-1}">
 						<option value="${mainContentList[i]}">${mainContentList[i]}</option>
 					</c:forEach>
 				</select> 
-				<select name="checkedSub" id="checkedSubCategory" class="checkedContentSelect">
+				<select name="checkedSub" id="checkedSubCategory" class="checkedContentSelect" style="cursor:pointer">
 					<option value="none">= 매인을 먼저 선택해주세요 =&nbsp&nbsp</option>
 				</select>
 			</form>
-			<input type="button" value="선택 카테고리 보기" id="checkedContentBtn" class="contentBtn" />
-			<input type="button" value="모든 카테고리 보기" id="allContentBtn" class="contentBtn" />
+			<input type="button" value="선택 카테고리 보기" id="checkedContentBtn" class="contentBtn" style="cursor:pointer" />
+			<input type="button" value="모든 카테고리 보기" id="allContentBtn" class="contentBtn" style="cursor:pointer"/>
 		</div>
 		<div class="btnContainer">
-			<input type="button" value="weekly" id="mwBtn" class="contentBtn" />
-			<input type="button" value="My Reservation" id="rsvBtn" class="contentBtn" />
+			<input type="button" value="weekly" id="mwBtn" class="contentBtn" style="cursor:pointer"/>
+			<input type="button" value="My Reservation" id="rsvBtn" class="contentBtn" style="cursor:pointer"/>
 		</div>
 
 	</div>
@@ -85,17 +85,21 @@
 
 		<!-- schedule form -->
 		<div class="userScheduleContainer">
-			<h1>내 스케쥴 현황</h1>
 			<div id="scheduleList">
-				<table border="1">
+				<table id="myRsvTable">
 					<thead>
 						<tr>
-							<th>스튜디오</th>
+							<th>예약 번호</th>
+							<th>대분류</th>
+							<th>소분류</th>
 							<th>예약 날짜</th>
-							<th>시간</th>
+							<th>시작 시간</th>
+							<th>종료 시간</th>
+							<th>수정</th>
+							<th>삭제</th>
 						</tr>
 					</thead>
-					<tbody id="scheduleTableBody">
+					<tbody>
 
 					</tbody>
 				</table>

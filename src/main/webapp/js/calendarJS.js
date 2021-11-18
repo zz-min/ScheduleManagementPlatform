@@ -23,6 +23,13 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		$(".weeklyCalendar").hide();
 		$(".userScheduleContainer").show();
 	}
+	/*************************RIGHT*************************/
+	$(".calendar_day").on("click",function(){
+		alert("click");
+		rsvDialog.dialog("open");
+		$("#rsv-dialog-date").text(`${currentDate.getFullYear()}년 ${String(currentDate.getMonth()+1).padStart(2,'0')}월 ${$(this).children().first().text()}일`);
+		$("#dialog-rsvList").html($(this).children().last().html());
+	});
 	
 	var path = window.location.href;
 	var path_ = path.split('/').reverse()[0];
@@ -61,6 +68,14 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		fetchData(`/api/schedules/${categoryNo}
 				?year=${currentDate.getFullYear()}&month=${String(currentDate.getMonth()+1).padStart(2,'0')}
 				&week=0&subContent=all`,'monthly');
+	}
+	function buildMonthMy() {
+		if(getCookie('userId')==null){
+			alert("쿠키에 로그인정보없음");			
+		}else{
+			fetchData(`/api/schedules/${categoryNo}
+					?id=${getCookie('userId')}`,'myRsv');
+		}
 	}
 	
 	function makeElementMonth(firstDate_CD) { // 11/6
@@ -154,6 +169,23 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 			for (let j = 0; j < 7; j++) {//일요일~토요일을 위해 7번 반복
 				$(".week" + i).children(":eq(" + j + ")").children().first().text(daySet[cnt++]);
 				$(".week" + i).children(":eq(" + j + ")").children().last().html('<ul class="dayRsvList"></ul>');
+			}
+		}
+		for(let i=0;i<7;i++){
+			var a=$(".week1").children(":eq(" + i + ")").children().first().text()*1;
+			var b=$(".week5").children(":eq(" + i + ")").children().first().text()*1;
+			var c=$(".week6").children(":eq(" + i + ")").children().first().text()*1;
+			if (a > 8) {
+				$(".week1").children(":eq(" + i + ")").css('background-color', 'gray');
+				$(".week1").children(":eq(" + i + ")").off('click');
+			}
+			if (b < 20) {
+				$(".week5").children(":eq(" + i + ")").css('background-color', 'gray');
+				$(".week5").children(":eq(" + i + ")").off('click');
+			}
+			if (c < 20) {
+				$(".week6").children(":eq(" + i + ")").css('background-color', 'gray');
+				$(".week6").children(":eq(" + i + ")").off('click');
 			}
 		}
 	}
@@ -276,16 +308,26 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 				for (var value of json) {
 					$('#checkedSubDialog').append($("<option></option>").attr("value", 2).text(`${value}`));
 				}
-			} else if (pageVal === 'scheduleList'){
-				
-			} 
+			}else if (pageVal === 'myRsv'){
+				for (var value of json) {
+					var str = "<tr id='seq"+value.schedule_seq+"'>"+
+					"<td>"+value.schedule_seq+"</td>"+
+					"<td>"+value.main_content+"</td>"+
+					"<td>"+value.sub_content+"</td>"+
+					"<td>"+value.rsv_date+"</td>"+
+					"<td>"+value.start_time+"</td>"+
+					"<td>"+value.end_time+"</td>"+
+					"<td><input type='button' class='change' value='수정' style='margin: 1px;'/></td>"+
+					"<td><input type='button' class='cancle' value='삭제'/></td></tr>";
+					//console.log(str);
+					$("#myRsvTable > tbody:last").append(str);
+				}
+			}
 		}
 	}
 	//////////HEADER부분 날짜 변경 버튼 함수
 	function clickMonth(cnt) {//////
 		currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + cnt, currentDate.getDate());
-		console.log("변경된 today데이터 : " + currentDate);
-		console.log("변경된 today데이터 달: " + currentDate.getMonth());
 		buildMonth();
 	}
 
@@ -298,17 +340,34 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	}
 	/************************LEFT*************************/
 	
-	function resetScroll(){
+	function resetMonthly(){
 		for (var i = 0; i < 5; i++) {
 			for (var j = 0; j < 6; j++) {
 				var h = $(".week" + i).children(":eq(" + j + ")").children().last().children().height();
 				if (h > 71) $(".week" + i).children(":eq(" + j + ")").children().last().css('overflow-y', 'inherit');
 			}
 		}
+		for(let i=0;i<7;i++){
+			var a=$(".week1").children(":eq(" + i + ")").children().first().text()*1;
+			var b=$(".week5").children(":eq(" + i + ")").children().first().text()*1;
+			var c=$(".week6").children(":eq(" + i + ")").children().first().text()*1;
+			if (a > 8) {
+				$(".week1").children(":eq(" + i + ")").css('background-color', '#ABD0CE');
+				$(".week1").children(":eq(" + i + ")").on('click');
+			}
+			if (b < 20) {
+				$(".week5").children(":eq(" + i + ")").css('background-color', '#ABD0CE');
+				$(".week5").children(":eq(" + i + ")").on('click');
+			}
+			if (c < 20) {
+				$(".week6").children(":eq(" + i + ")").css('background-color', '#ABD0CE');
+				$(".week6").children(":eq(" + i + ")").on('click');
+			}
+		}
 	}
 	$("#prevBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly') {
-			resetScroll();
+			resetMonthly();
 			clickMonth(-1);
 		} else if ($("#mwBtn").val() == 'monthly') {
 			buildWeek(-1);
@@ -316,7 +375,7 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 	});
 	$("#nextBtn").click(function() {
 		if ($("#mwBtn").val() == 'weekly') {
-			resetScroll();
+			resetMonthly();
 			clickMonth(1);
 		} else if ($("#mwBtn").val() == 'monthly') {
 			buildWeek(1);
@@ -377,19 +436,16 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 	});
 	$("#rsvBtn").click(function() {
-		$(this).toggleClass('active');
+		showSchedule();
+		buildMonthMy();
 	});
-	
-	
-	/*************************RIGHT*************************/
-	$(".calendar_day").on("click",function(){
-		rsvDialog.dialog("open");
-		$("#rsv-dialog-date").text(`${currentDate.getFullYear()}년 ${String(currentDate.getMonth()+1).padStart(2,'0')}월 ${$(this).children().first().text()}일`);
-		$("#dialog-rsvList").html($(this).children().last().html());
-		
-		//today.getFullYear()+(String(today.getMonth()+1).padStart(2,'0'))+$(this).children().first().text()
-	});
-	
+/*	$('#myRsvTable').DataTable({
+		lengthChange : false,
+		searching: false,
+		ordering: false,
+		info: false,
+		paging: false
+	});*/
 	/*************************RSV dialog *************************/
 	$("#checkedMainDialog").change(function() {
 		var v = $("#checkedMainDialog").val();
@@ -454,16 +510,17 @@ $(window).load(function() {//모든 페이지 구성요소 페인팅 완료 후 
 		}
 		return valid;
 	});
-	$("#logoutBtn").on("click", function() {
-		alert("로그아웃z");
-		/*$(".logoutSection").removeClass('active');
-		$("#loginZone").children(":eq(1)").text('Login');	*/
-		delAllCookie();
-		//location.replace("/main");
-	});
-	$("#mypageBtn").on("click", function() {
-		alert("마이페이지");
-	});
+	function getCookie(cookie_name) {
+		//document.cookie => userId=600548; userName=홍길동; login=true
+		var x, y;
+		var val = document.cookie.split(';');
+		for (var item of val) {
+			x = item.substr(0, item.indexOf('='));
+			y = item.substr(item.indexOf('=') + 1);
+			x = x.replace(/^\s+|\s+$/g, '');// 앞과 뒤의 공백 제거하기 
+			if (x == cookie_name) { return unescape(y); }// unescape로 디코딩 후 값 리턴 
+		}
+	} 
 	function delAllCookie() {
 		var x, y;
 		var val = document.cookie.split(';');

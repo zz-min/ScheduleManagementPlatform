@@ -156,11 +156,23 @@ public class ApiScheduleController implements ControllerInterface {
 			} else if (query != null) {//week=0 -> montly, week=1~6 -> weekly
 				// /api/schedules? year=2021 & month=10 & week=0 & subContent=사범관 & subContent=202
 				// /api/schedules? year=2021 & month=10 & week=0 & subContent= all
-				// /api/schedules? year=2021 & month=10 & week=0 & id= 201795032
-				if(id!=null) { // id정보로 해당 schedules 내용 조회
+				// /api/schedules? year=2021 & month=10 & id= 201795032
+				// /api/schedules? id= 201795032
+				if(id!=null&&year!=null) { // id정보로 해당 DATE정보로 schedules 내용 조회
 					if (method.equals("GET")) {//특정 id의 schedules 정보가져오기
 						System.out.println("특정 id의  schedules정보 조회 - ApiScheduleController - GET");
 						sql = "year(rsv_date) = " + year + " AND month(rsv_date) = " + month+" AND user_id ="+id; 
+						List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리중 특정 id만
+						try {
+							returnMassage = mapper.writeValueAsString(scheduleList);
+						} catch (JsonProcessingException e) {
+							e.printStackTrace();
+						}
+					}
+				}else if(id!=null&&year==null) {// id정보로 ALL schedules 내용 조회
+					if (method.equals("GET")) {//특정 id의 schedules 정보가져오기
+						System.out.println("특정 id의  schedules정보 조회 - ApiScheduleController - GET");
+						sql = "user_id ="+id; 
 						List<AllViewEntity> scheduleList = smpService.getScheduleList(sql, categoryNo);// 해당카테고리중 특정 id만
 						try {
 							returnMassage = mapper.writeValueAsString(scheduleList);
@@ -172,7 +184,7 @@ public class ApiScheduleController implements ControllerInterface {
 					} else if (method.equals("DELETE")) {// 특정 id의 schedule 정보 삭제하기
 
 					}
-				} else if (searchSelect != null) {
+				}else if (searchSelect != null) {
 					System.out.println(searchSelect);
 					System.out.println(textValue);
 					textValue = "'" + textValue + "'";
